@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hotModo", "hotModo.vcxproj", "{39E4FCCC-5ABA-4F8D-9999-1EA807E16228}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "commonLib", "commonLib\commonLib.vcxproj", "{F0F982D8-CF9F-4154-83C0-AEBE670C3D2A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{39E4FCCC-5ABA-4F8D-9999-1EA807E16228}.Debug|Win32.ActiveCfg = Debug|Win32
+		{39E4FCCC-5ABA-4F8D-9999-1EA807E16228}.Debug|Win32.Build.0 = Debug|Win32
+		{39E4FCCC-5ABA-4F8D-9999-1EA807E16228}.Debug|x64.ActiveCfg = Debug|x64
+		{39E4FCCC-5ABA-4F8D-9999-1EA807E16228}.Debug|x64.Build.0 = Debug|x64
+		{39E4FCCC-5ABA-4F8D-9999-1EA807E16228}.Release|Win32.ActiveCfg = Release|Win32
+		{39E4FCCC-5ABA-4F8D-9999-1EA807E16228}.Release|Win32.Build.0 = Release|Win32
+		{39E4FCCC-5ABA-4F8D-9999-1EA807E16228}.Release|x64.ActiveCfg = Release|x64
+		{39E4FCCC-5ABA-4F8D-9999-1EA807E16228}.Release|x64.Build.0 = Release|x64
+		{F0F982D8-CF9F-4154-83C0-AEBE670C3D2A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F0F982D8-CF9F-4154-83C0-AEBE670C3D2A}.Debug|Win32.Build.0 = Debug|Win32
+		{F0F982D8-CF9F-4154-83C0-AEBE670C3D2A}.Debug|x64.ActiveCfg = Debug|x64
+		{F0F982D8-CF9F-4154-83C0-AEBE670C3D2A}.Debug|x64.Build.0 = Debug|x64
+		{F0F982D8-CF9F-4154-83C0-AEBE670C3D2A}.Release|Win32.ActiveCfg = Release|Win32
+		{F0F982D8-CF9F-4154-83C0-AEBE670C3D2A}.Release|Win32.Build.0 = Release|Win32
+		{F0F982D8-CF9F-4154-83C0-AEBE670C3D2A}.Release|x64.ActiveCfg = Release|x64
+		{F0F982D8-CF9F-4154-83C0-AEBE670C3D2A}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

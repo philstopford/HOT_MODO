@@ -1,0 +1,1 @@
+/usr/bin/c++    -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/exr2aces.dir/main.cpp.o  -o exr2aces  ../IlmImf/libIlmImf.1.7.1.dylib /usr/lib/libz.dylib ../../IlmBase/Half/libHalf.1.0.3.dylib ../../IlmBase/IlmThread/libIlmThread.1.0.3.dylib ../../IlmBase/Iex/libIex.1.0.3.dylib 

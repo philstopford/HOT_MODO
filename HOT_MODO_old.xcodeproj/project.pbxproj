@@ -1,0 +1,372 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4A012A6A16E815B500CAE2F8 /* libIex.1.0.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A012A6916E815B500CAE2F8 /* libIex.1.0.3.dylib */; };
+		4A50B03016E5908A002EE791 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A50B02F16E5908A002EE791 /* Cocoa.framework */; };
+		4A767F03191E686D009AF0FB /* hotModo_command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A767EF4191E686D009AF0FB /* hotModo_command.cpp */; };
+		4A767F04191E686D009AF0FB /* hotModo_deformer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A767EF6191E686D009AF0FB /* hotModo_deformer.cpp */; };
+		4A767F05191E686D009AF0FB /* hotModo_shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A767EF8191E686D009AF0FB /* hotModo_shader.cpp */; };
+		4A767F06191E686D009AF0FB /* hotModo_texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A767EFA191E686D009AF0FB /* hotModo_texture.cpp */; };
+		4AA800F616E6F5040093BC81 /* libblitz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA800ED16E6F5040093BC81 /* libblitz.a */; };
+		4AA800F816E6F5040093BC81 /* libfftw3f_threads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA800EF16E6F5040093BC81 /* libfftw3f_threads.a */; };
+		4AA800FA16E6F5040093BC81 /* libfftw3f.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA800F116E6F5040093BC81 /* libfftw3f.a */; };
+		4AA800FC16E6F5040093BC81 /* libImath.1.0.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA800F316E6F5040093BC81 /* libImath.1.0.3.dylib */; };
+		4AA800FE16E6F5040093BC81 /* liblwpp_64.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA800F516E6F5040093BC81 /* liblwpp_64.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		4A012A6916E815B500CAE2F8 /* libIex.1.0.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libIex.1.0.3.dylib; path = "dependencies/openexr-cmake/IlmBase/Iex/libIex.1.0.3.dylib"; sourceTree = "<group>"; };
+		4A50B02C16E5908A002EE791 /* HOT_MODO.lx */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HOT_MODO.lx; sourceTree = BUILT_PRODUCTS_DIR; };
+		4A50B02F16E5908A002EE791 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		4A50B03216E5908A002EE791 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		4A50B03316E5908A002EE791 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		4A50B03416E5908A002EE791 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		4A767EF4191E686D009AF0FB /* hotModo_command.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hotModo_command.cpp; sourceTree = "<group>"; };
+		4A767EF5191E686D009AF0FB /* hotModo_command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hotModo_command.h; sourceTree = "<group>"; };
+		4A767EF6191E686D009AF0FB /* hotModo_deformer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hotModo_deformer.cpp; sourceTree = "<group>"; };
+		4A767EF7191E686D009AF0FB /* hotModo_deformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hotModo_deformer.h; sourceTree = "<group>"; };
+		4A767EF8191E686D009AF0FB /* hotModo_shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hotModo_shader.cpp; sourceTree = "<group>"; };
+		4A767EF9191E686D009AF0FB /* hotModo_shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hotModo_shader.h; sourceTree = "<group>"; };
+		4A767EFA191E686D009AF0FB /* hotModo_texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hotModo_texture.cpp; sourceTree = "<group>"; };
+		4A767EFB191E686D009AF0FB /* hotModo_texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hotModo_texture.h; sourceTree = "<group>"; };
+		4AA800ED16E6F5040093BC81 /* libblitz.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libblitz.a; path = "dependencies/hot-master/3rdparty/osx/lib/libblitz.a"; sourceTree = "<group>"; };
+		4AA800EF16E6F5040093BC81 /* libfftw3f_threads.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfftw3f_threads.a; path = "dependencies/hot-master/3rdparty/osx/lib/libfftw3f_threads.a"; sourceTree = "<group>"; };
+		4AA800F116E6F5040093BC81 /* libfftw3f.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfftw3f.a; path = "dependencies/hot-master/3rdparty/osx/lib/libfftw3f.a"; sourceTree = "<group>"; };
+		4AA800F316E6F5040093BC81 /* libImath.1.0.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libImath.1.0.3.dylib; path = "dependencies/openexr-cmake/IlmBase/Imath/libImath.1.0.3.dylib"; sourceTree = "<group>"; };
+		4AA800F416E6F5040093BC81 /* liblwpp_32.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblwpp_32.a; path = dependencies/lwpp/build/liblwpp_32.a; sourceTree = "<group>"; };
+		4AA800F516E6F5040093BC81 /* liblwpp_64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblwpp_64.a; path = dependencies/lwpp/build/liblwpp_64.a; sourceTree = "<group>"; };
+		4AA8011216E6F63E0093BC81 /* HOT_LW copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "HOT_LW copy-Info.plist"; path = "/Volumes/Phil/Documents/development/LW/HOT_LW/HOT_LW copy-Info.plist"; sourceTree = "<absolute>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4A50B02916E5908A002EE791 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4AA800F616E6F5040093BC81 /* libblitz.a in Frameworks */,
+				4AA800F816E6F5040093BC81 /* libfftw3f_threads.a in Frameworks */,
+				4AA800FA16E6F5040093BC81 /* libfftw3f.a in Frameworks */,
+				4AA800FC16E6F5040093BC81 /* libImath.1.0.3.dylib in Frameworks */,
+				4A012A6A16E815B500CAE2F8 /* libIex.1.0.3.dylib in Frameworks */,
+				4AA800FE16E6F5040093BC81 /* liblwpp_64.a in Frameworks */,
+				4A50B03016E5908A002EE791 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4A50B02316E5908A002EE791 = {
+			isa = PBXGroup;
+			children = (
+				4A767EEE191E686D009AF0FB /* HOTModo */,
+				4A50B02E16E5908A002EE791 /* Frameworks */,
+				4A50B02D16E5908A002EE791 /* Products */,
+				4AA8011216E6F63E0093BC81 /* HOT_LW copy-Info.plist */,
+			);
+			sourceTree = "<group>";
+		};
+		4A50B02D16E5908A002EE791 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4A50B02C16E5908A002EE791 /* HOT_MODO.lx */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4A50B02E16E5908A002EE791 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4AA800ED16E6F5040093BC81 /* libblitz.a */,
+				4AA800EF16E6F5040093BC81 /* libfftw3f_threads.a */,
+				4AA800F116E6F5040093BC81 /* libfftw3f.a */,
+				4A012A6916E815B500CAE2F8 /* libIex.1.0.3.dylib */,
+				4AA800F316E6F5040093BC81 /* libImath.1.0.3.dylib */,
+				4AA800F516E6F5040093BC81 /* liblwpp_64.a */,
+				4AA800F416E6F5040093BC81 /* liblwpp_32.a */,
+				4A50B02F16E5908A002EE791 /* Cocoa.framework */,
+				4A50B03116E5908A002EE791 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4A50B03116E5908A002EE791 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4A50B03216E5908A002EE791 /* AppKit.framework */,
+				4A50B03316E5908A002EE791 /* CoreData.framework */,
+				4A50B03416E5908A002EE791 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		4A767EEE191E686D009AF0FB /* HOTModo */ = {
+			isa = PBXGroup;
+			children = (
+				4A767EF4191E686D009AF0FB /* hotModo_command.cpp */,
+				4A767EF5191E686D009AF0FB /* hotModo_command.h */,
+				4A767EF6191E686D009AF0FB /* hotModo_deformer.cpp */,
+				4A767EF7191E686D009AF0FB /* hotModo_deformer.h */,
+				4A767EF8191E686D009AF0FB /* hotModo_shader.cpp */,
+				4A767EF9191E686D009AF0FB /* hotModo_shader.h */,
+				4A767EFA191E686D009AF0FB /* hotModo_texture.cpp */,
+				4A767EFB191E686D009AF0FB /* hotModo_texture.h */,
+			);
+			path = HOTModo;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4A50B02B16E5908A002EE791 /* HOT_MODO */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4A50B03E16E5908A002EE791 /* Build configuration list for PBXNativeTarget "HOT_MODO" */;
+			buildPhases = (
+				4A50B02816E5908A002EE791 /* Sources */,
+				4A50B02916E5908A002EE791 /* Frameworks */,
+				4A50B02A16E5908A002EE791 /* Resources */,
+				4A7CA97A16E818BC00ECBA95 /* ShellScript */,
+				4A7CA97C16E81B3000ECBA95 /* ShellScript */,
+				4A81873816E82026009F58D9 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HOT_MODO;
+			productName = HOT_LW;
+			productReference = 4A50B02C16E5908A002EE791 /* HOT_MODO.lx */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4A50B02416E5908A002EE791 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = "Phil Stopford";
+			};
+			buildConfigurationList = 4A50B02716E5908A002EE791 /* Build configuration list for PBXProject "HOT_MODO" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 4A50B02316E5908A002EE791;
+			productRefGroup = 4A50B02D16E5908A002EE791 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4A50B02B16E5908A002EE791 /* HOT_MODO */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4A50B02A16E5908A002EE791 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4A7CA97A16E818BC00ECBA95 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export DYLIB=libIex.1.0.3.dylib\nexport REFDIR=/Users/phil/Documents/development/hg/openexr-cmake/\nmkdir \"$TARGET_BUILD_DIR/$TARGET_NAME.plugin/Contents/Frameworks\"\ncp -f \"$SRCROOT/dependencies/lib/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.plugin/Contents/Frameworks\"\ninstall_name_tool -change \"$REFDIR/IlmBase/Iex/$DYLIB\" \"@loader_path/../Frameworks/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.plugin/Contents/MacOS/$PRODUCT_NAME\"";
+		};
+		4A7CA97C16E81B3000ECBA95 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export DYLIB=libImath.1.0.3.dylib\nexport REFDIR=/Users/phil/Documents/development/hg/openexr-cmake/\ncp -f \"$SRCROOT/dependencies/lib/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.plugin/Contents/Frameworks\"\ninstall_name_tool -change \"$REFDIR/IlmBase/Imath/$DYLIB\" \"@loader_path/../Frameworks/$DYLIB\" \"$TARGET_BUILD_DIR/$TARGET_NAME.plugin/Contents/MacOS/$PRODUCT_NAME\"";
+		};
+		4A81873816E82026009F58D9 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export DYLIB=libImath.1.0.3.dylib\nexport DYLIB2=libIex.1.0.3.dylib\nexport REFDIR=/Users/phil/Documents/development/hg/openexr-cmake/\ninstall_name_tool -change \"$REFDIR/IlmBase/Iex/$DYLIB2\" \"@loader_path/../Frameworks/$DYLIB2\" \"$TARGET_BUILD_DIR/$TARGET_NAME.plugin/Contents/Frameworks/$DYLIB\"";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4A50B02816E5908A002EE791 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4A767F03191E686D009AF0FB /* hotModo_command.cpp in Sources */,
+				4A767F04191E686D009AF0FB /* hotModo_deformer.cpp in Sources */,
+				4A767F05191E686D009AF0FB /* hotModo_shader.cpp in Sources */,
+				4A767F06191E686D009AF0FB /* hotModo_texture.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4A50B03C16E5908A002EE791 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = x86_64;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CONFIGURATION_BUILD_DIR = build;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					_MACOS,
+					"LW_SDK=96",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/dependencies/lib";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/dependencies/hot-master $(SRCROOT)/dependencies/hot-master/3rdparty/src/fftw-3.2.2/api $(SRCROOT)/dependencies/hot-master/3rdparty/src/loki-0.1.6/include $(SRCROOT)/dependencies/hot-master/3rdparty/src/blitz $(SRCROOT)/dependencies/openexr-cmake/IlmBase/Imath";
+				VALID_ARCHS = x86_64;
+			};
+			name = Debug;
+		};
+		4A50B03D16E5908A002EE791 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = x86_64;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CONFIGURATION_BUILD_DIR = build;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					_MACOS,
+					"LW_SDK=96",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/dependencies/lib";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/dependencies/hot-master $(SRCROOT)/dependencies/hot-master/3rdparty/src/fftw-3.2.2/api $(SRCROOT)/dependencies/hot-master/3rdparty/src/loki-0.1.6/include $(SRCROOT)/dependencies/hot-master/3rdparty/src/blitz $(SRCROOT)/dependencies/openexr-cmake/IlmBase/Imath";
+				VALID_ARCHS = x86_64;
+			};
+			name = Release;
+		};
+		4A50B03F16E5908A002EE791 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = x86_64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "HOT_LW/HOT_LW-Prefix.pch";
+				INFOPLIST_FILE = "HOT_LW/HOT_LW-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/..\"",
+					"\"$(SRCROOT)/dependencies/hot-master/3rdparty/osx/lib\"",
+					"\"$(SRCROOT)/dependencies/openexr-cmake/IlmBase/Imath\"",
+					"\"$(SRCROOT)/dependencies/lwpp/build\"",
+					"\"$(SRCROOT)/dependencies/openexr-cmake/IlmBase/Iex\"",
+				);
+				PRODUCT_NAME = HOT_MODO;
+				VALID_ARCHS = x86_64;
+				WRAPPER_EXTENSION = lx;
+			};
+			name = Debug;
+		};
+		4A50B04016E5908A002EE791 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = x86_64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "HOT_LW/HOT_LW-Prefix.pch";
+				INFOPLIST_FILE = "HOT_LW/HOT_LW-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/..\"",
+					"\"$(SRCROOT)/dependencies/hot-master/3rdparty/osx/lib\"",
+					"\"$(SRCROOT)/dependencies/openexr-cmake/IlmBase/Imath\"",
+					"\"$(SRCROOT)/dependencies/lwpp/build\"",
+					"\"$(SRCROOT)/dependencies/openexr-cmake/IlmBase/Iex\"",
+				);
+				PRODUCT_NAME = HOT_MODO;
+				VALID_ARCHS = x86_64;
+				WRAPPER_EXTENSION = lx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4A50B02716E5908A002EE791 /* Build configuration list for PBXProject "HOT_MODO" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4A50B03C16E5908A002EE791 /* Debug */,
+				4A50B03D16E5908A002EE791 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4A50B03E16E5908A002EE791 /* Build configuration list for PBXNativeTarget "HOT_MODO" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4A50B03F16E5908A002EE791 /* Debug */,
+				4A50B04016E5908A002EE791 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4A50B02416E5908A002EE791 /* Project object */;
+}

@@ -1,0 +1,11 @@
+README
+
+Due to OS X packaging quirks, you'll need to massage the build slightly.
+I've tried to add build scripts to do this, but I'm not convinced that they work properly. If they don't, you'll need to use 'install_name_tool -change' to force the library look-ups to match :
+
+
+libIex (in the plugin and also the libImath library in Frameworks):
+	@loader_path/../Frameworks/libIex.7.0.0.dylib (compatibility version 7.0.0, current version 1.0.3)
+
+libImath (in the plugin):
+	@loader_path/../Frameworks/libImath.7.0.0.dylib (compatibility version 7.0.0, current version 1.0.3)
