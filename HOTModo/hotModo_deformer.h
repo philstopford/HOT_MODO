@@ -251,9 +251,9 @@ class CInfluence : public CLxMeshInfluence
 				
 
 
-				offF[0] = posF[0]+ result[0];
-				offF[1] = posF[1]+ result[1];
-				offF[2] = posF[2]+ result[2];
+				offF[0] = posF[0]+ cur.m_context->disp[0];
+				offF[1] = posF[1]+ cur.m_context->disp[1];
+				offF[2] = posF[2]+ cur.m_context->disp[2];
 
 				LXx_VSUB (offF, posF);
 

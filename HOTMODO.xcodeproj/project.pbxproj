@@ -34,11 +34,8 @@
 		4AFBD3CA191E6B5F00181ED4 /* hotModo_texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AFBD3C0191E6B5F00181ED4 /* hotModo_texture.cpp */; };
 		4AFBD3CB191E6B5F00181ED4 /* hotModo_texture.h in Headers */ = {isa = PBXBuildFile; fileRef = 4AFBD3C1191E6B5F00181ED4 /* hotModo_texture.h */; };
 		4AFBD3D6191E6BB300181ED4 /* libblitz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AFBD3CC191E6BB300181ED4 /* libblitz.a */; };
-		4AFBD3D7191E6BB300181ED4 /* libblitz.la in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AFBD3CD191E6BB300181ED4 /* libblitz.la */; };
 		4AFBD3D8191E6BB300181ED4 /* libfftw3f_threads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AFBD3CE191E6BB300181ED4 /* libfftw3f_threads.a */; };
-		4AFBD3D9191E6BB300181ED4 /* libfftw3f_threads.la in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AFBD3CF191E6BB300181ED4 /* libfftw3f_threads.la */; };
 		4AFBD3DA191E6BB300181ED4 /* libfftw3f.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AFBD3D0191E6BB300181ED4 /* libfftw3f.a */; };
-		4AFBD3DB191E6BB300181ED4 /* libfftw3f.la in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AFBD3D1191E6BB300181ED4 /* libfftw3f.la */; };
 		4AFBD3DC191E6BB300181ED4 /* libIex.1.0.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AFBD3D2191E6BB300181ED4 /* libIex.1.0.3.dylib */; };
 		4AFBD3DE191E6BB300181ED4 /* libImath.1.0.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AFBD3D4191E6BB300181ED4 /* libImath.1.0.3.dylib */; };
 /* End PBXBuildFile section */
@@ -74,7 +71,7 @@
 		4A7B5147161801210091E644 /* lxu_simd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lxu_simd.cpp; path = ../LXSDK/common/lxu_simd.cpp; sourceTree = "<group>"; };
 		4A7B5148161801210091E644 /* lxu_surface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lxu_surface.cpp; path = ../LXSDK/common/lxu_surface.cpp; sourceTree = "<group>"; };
 		4A7B5149161801210091E644 /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = util.cpp; path = ../LXSDK/common/util.cpp; sourceTree = "<group>"; };
-		4AED76B6161800A400588EB3 /* libHOTMODO.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libHOTMODO.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		4AED76B6161800A400588EB3 /* libHOTMODO.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; name = libHOTMODO.dylib; path = libHOTMODO.lx; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AFBD3BA191E6B5F00181ED4 /* hotModo_command.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hotModo_command.cpp; sourceTree = "<group>"; };
 		4AFBD3BB191E6B5F00181ED4 /* hotModo_command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hotModo_command.h; sourceTree = "<group>"; };
 		4AFBD3BC191E6B5F00181ED4 /* hotModo_deformer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hotModo_deformer.cpp; sourceTree = "<group>"; };
@@ -84,11 +81,8 @@
 		4AFBD3C0191E6B5F00181ED4 /* hotModo_texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hotModo_texture.cpp; sourceTree = "<group>"; };
 		4AFBD3C1191E6B5F00181ED4 /* hotModo_texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hotModo_texture.h; sourceTree = "<group>"; };
 		4AFBD3CC191E6BB300181ED4 /* libblitz.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libblitz.a; path = "dependencies/hot-master/3rdparty/osx/lib/libblitz.a"; sourceTree = "<group>"; };
-		4AFBD3CD191E6BB300181ED4 /* libblitz.la */ = {isa = PBXFileReference; lastKnownFileType = text; name = libblitz.la; path = "dependencies/hot-master/3rdparty/osx/lib/libblitz.la"; sourceTree = "<group>"; };
 		4AFBD3CE191E6BB300181ED4 /* libfftw3f_threads.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfftw3f_threads.a; path = "dependencies/hot-master/3rdparty/osx/lib/libfftw3f_threads.a"; sourceTree = "<group>"; };
-		4AFBD3CF191E6BB300181ED4 /* libfftw3f_threads.la */ = {isa = PBXFileReference; lastKnownFileType = text; name = libfftw3f_threads.la; path = "dependencies/hot-master/3rdparty/osx/lib/libfftw3f_threads.la"; sourceTree = "<group>"; };
 		4AFBD3D0191E6BB300181ED4 /* libfftw3f.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfftw3f.a; path = "dependencies/hot-master/3rdparty/osx/lib/libfftw3f.a"; sourceTree = "<group>"; };
-		4AFBD3D1191E6BB300181ED4 /* libfftw3f.la */ = {isa = PBXFileReference; lastKnownFileType = text; name = libfftw3f.la; path = "dependencies/hot-master/3rdparty/osx/lib/libfftw3f.la"; sourceTree = "<group>"; };
 		4AFBD3D2191E6BB300181ED4 /* libIex.1.0.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libIex.1.0.3.dylib; path = "dependencies/openexr-cmake/IlmBase/Iex/libIex.1.0.3.dylib"; sourceTree = "<group>"; };
 		4AFBD3D3191E6BB300181ED4 /* libIex.1.0.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libIex.1.0.3.dylib; path = "dependencies/openexr-cmake/IlmBase/Iex/libIex.1.0.3.dylib"; sourceTree = "<group>"; };
 		4AFBD3D4191E6BB300181ED4 /* libImath.1.0.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libImath.1.0.3.dylib; path = "dependencies/openexr-cmake/IlmBase/Imath/libImath.1.0.3.dylib"; sourceTree = "<group>"; };
@@ -108,11 +102,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4AFBD3D6191E6BB300181ED4 /* libblitz.a in Frameworks */,
-				4AFBD3D7191E6BB300181ED4 /* libblitz.la in Frameworks */,
 				4AFBD3D8191E6BB300181ED4 /* libfftw3f_threads.a in Frameworks */,
-				4AFBD3D9191E6BB300181ED4 /* libfftw3f_threads.la in Frameworks */,
 				4AFBD3DA191E6BB300181ED4 /* libfftw3f.a in Frameworks */,
-				4AFBD3DB191E6BB300181ED4 /* libfftw3f.la in Frameworks */,
 				4AFBD3DC191E6BB300181ED4 /* libIex.1.0.3.dylib in Frameworks */,
 				4AFBD3DE191E6BB300181ED4 /* libImath.1.0.3.dylib in Frameworks */,
 				4A7B51601618018B0091E644 /* libcommon.a in Frameworks */,
@@ -186,11 +177,8 @@
 			isa = PBXGroup;
 			children = (
 				4AFBD3CC191E6BB300181ED4 /* libblitz.a */,
-				4AFBD3CD191E6BB300181ED4 /* libblitz.la */,
 				4AFBD3CE191E6BB300181ED4 /* libfftw3f_threads.a */,
-				4AFBD3CF191E6BB300181ED4 /* libfftw3f_threads.la */,
 				4AFBD3D0191E6BB300181ED4 /* libfftw3f.a */,
-				4AFBD3D1191E6BB300181ED4 /* libfftw3f.la */,
 				4AFBD3D2191E6BB300181ED4 /* libIex.1.0.3.dylib */,
 				4AFBD3D3191E6BB300181ED4 /* libIex.1.0.3.dylib */,
 				4AFBD3D4191E6BB300181ED4 /* libImath.1.0.3.dylib */,
