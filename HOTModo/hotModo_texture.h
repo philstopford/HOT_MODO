@@ -62,6 +62,8 @@ class hotModoTexture : public CLxImpl_ValueTexture
 		unsigned m_idx_waveHeight;
 		unsigned m_idx_shortestWave;
 		unsigned m_idx_oceanDepth;
+        unsigned m_idx_seed;
+        unsigned m_idx_damping;
 		unsigned m_idx_time;
 
 		drw::Ocean        *m_ocean;
@@ -84,6 +86,8 @@ class hotModoTexture : public CLxImpl_ValueTexture
 		float m_waveHeightCache;
 		float m_shortestWaveCache;
 		float m_oceanDepthCache;
+        float m_seedCache;
+        float m_dampingCache;
 		float m_timeCache;
 
         class RendData {
@@ -106,6 +110,8 @@ class hotModoTexture : public CLxImpl_ValueTexture
 				float m_waveHeight;
 				float m_shortestWave;
 				float m_oceanDepth;
+                float m_seed;
+                float m_damping;
 				float m_time;
         };
 };

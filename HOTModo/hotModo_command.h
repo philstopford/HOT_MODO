@@ -84,7 +84,7 @@ class CItemSelectionTracker :
             void			*pkt;
 
             scan = 0;
-            while (scan = srv_sel.ScanLoopCurrent (scan, selID_item, &pkt)) 
+            while (scan = srv_sel.ScanLoopCurrent (scan, selID_item, &pkt))
 			{
                     pkt_item.GetItem (pkt, item);
                     if (vis.Item (item))

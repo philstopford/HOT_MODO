@@ -82,7 +82,7 @@ LxResult CPackage::pkg_SetupChannels(ILxUnknownID addChan)
 	ac.SetDefault  (200.0f, 0);
 
 	ac.NewChannel  ("windSpeed",	LXsTYPE_FLOAT);
-	ac.SetDefault  (2.0f, 0);
+	ac.SetDefault  (30.0f, 0);
 
 	ac.NewChannel  ("windDir",	LXsTYPE_FLOAT);
 	ac.SetDefault  (0.0f, 0);
@@ -91,20 +91,22 @@ LxResult CPackage::pkg_SetupChannels(ILxUnknownID addChan)
 	ac.SetDefault  (2.0f, 0);
 
 	ac.NewChannel  ("chop",	LXsTYPE_FLOAT);
-	ac.SetDefault  (0.5f, 0);
+	ac.SetDefault  (1.78f, 0);
 
 	ac.NewChannel  ("waveHeight",	LXsTYPE_FLOAT);
-	ac.SetDefault  (5.0f, 0);
+	ac.SetDefault  (1.6f, 0);
 
 	ac.NewChannel  ("shortestWave",	LXsTYPE_FLOAT);
-	ac.SetDefault  (0.001f, 0);
+	ac.SetDefault  (0.02f, 0);
 
 	ac.NewChannel  ("oceanDepth",	LXsTYPE_FLOAT);
 	ac.SetDefault  (200.0f, 0);
 
-	ac.NewChannel  ("time",	LXsTYPE_FLOAT);
-	ac.SetDefault  (0.0f, 0);
+	ac.NewChannel  ("damping",	LXsTYPE_FLOAT);
+	ac.SetDefault  (0.5f, 0);
 
+	ac.NewChannel  ("seed",	LXsTYPE_FLOAT);
+	ac.SetDefault  (1.0f, 0);
 
 	return LXe_OK;
 }

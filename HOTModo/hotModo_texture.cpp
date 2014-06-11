@@ -78,19 +78,22 @@ LxResult hotModoTexture::vtx_SetupChannels (ILxUnknownID addChan)
 	ac.SetDefault  (2.0f, 0);
 
 	ac.NewChannel  ("chop",	LXsTYPE_FLOAT);
-	ac.SetDefault  (0.5f, 0);
+	ac.SetDefault  (1.78f, 0);
 
 	ac.NewChannel  ("waveHeight",	LXsTYPE_FLOAT);
-	ac.SetDefault  (5.0f, 0);
+	ac.SetDefault  (1.6f, 0);
 
 	ac.NewChannel  ("shortestWave",	LXsTYPE_FLOAT);
-	ac.SetDefault  (0.001f, 0);
+	ac.SetDefault  (0.02f, 0);
 
 	ac.NewChannel  ("oceanDepth",	LXsTYPE_FLOAT);
 	ac.SetDefault  (200.0f, 0);
 
-	ac.NewChannel  ("time",	LXsTYPE_FLOAT);
-	ac.SetDefault  (0.0f, 0);
+    ac.NewChannel  ("damping",	LXsTYPE_FLOAT);
+	ac.SetDefault  (0.5f, 0);
+
+    ac.NewChannel  ("seed",	LXsTYPE_FLOAT);
+	ac.SetDefault  (1.0f, 0);
 
     return LXe_OK;
 }
@@ -119,8 +122,12 @@ LxResult hotModoTexture::vtx_LinkChannels (ILxUnknownID eval, ILxUnknownID	item)
 	m_idx_waveHeight = ev.AddChan (item, "waveHeight");
 	m_idx_shortestWave = ev.AddChan (item, "shortestWave");
 	m_idx_oceanDepth = ev.AddChan (item, "oceanDepth");
-	m_idx_time = ev.AddChan (item, "time");
+	m_idx_damping = ev.AddChan (item, "damping");
+    m_idx_seed = ev.AddChan(item, "seed");
+	// m_idx_time = ev.AddChan (item, "time");
 
+    m_idx_time = ev.AddTime ();
+    
     tin_offset = pkt_service.GetOffset (LXsCATEGORY_SAMPLE, LXsP_TEXTURE_INPUT);
 	tinDsp_offset = pkt_service.GetOffset (LXsCATEGORY_SAMPLE, LXsP_DISPLACE);
 
@@ -156,7 +163,10 @@ LxResult hotModoTexture::vtx_ReadChannels(ILxUnknownID attr, void  **ppvData)
 	rd->m_waveHeight = at.Float(m_idx_waveHeight);
 	rd->m_shortestWave = at.Float(m_idx_shortestWave);
 	rd->m_oceanDepth = at.Float(m_idx_oceanDepth);
-	rd->m_time = at.Float(m_idx_time);
+	rd->m_damping = at.Float(m_idx_damping);
+	rd->m_seed = at.Float(m_idx_seed);
+    
+    rd->m_time = at.Float(m_idx_time);
 	
 	if( rd->m_resolution != m_resolutionCache ||
 		rd->m_size != m_sizeCache ||
@@ -164,7 +174,10 @@ LxResult hotModoTexture::vtx_ReadChannels(ILxUnknownID attr, void  **ppvData)
 		rd->m_windDir != m_windDirCache ||
 		rd->m_windAlign != m_windAlignCache ||
 		rd->m_shortestWave != m_shortestWaveCache ||
-		rd->m_oceanDepth != m_oceanDepthCache )
+        rd->m_oceanDepth != m_oceanDepthCache ||
+        rd->m_damping != m_dampingCache ||
+        rd->m_seed != m_seedCache ||
+        rd->m_time != m_timeCache )
 	{
 		if(m_ocean != NULL) 
 		{
@@ -181,13 +194,19 @@ LxResult hotModoTexture::vtx_ReadChannels(ILxUnknownID attr, void  **ppvData)
 		m_windAlignCache = rd->m_windAlign;
 		m_shortestWaveCache = rd->m_shortestWave;
 		m_oceanDepthCache = rd->m_oceanDepth;
+		m_dampingCache = rd->m_damping;
+        m_seedCache = rd->m_seed;
+        m_timeCache = rd->m_time;
 	}
 	
 	if(m_ocean == NULL)
 	{
+        /* resolution,resolution,size/float(resolution),size/float(resolution),
+        windSpeed,shortestWave,waveHeight,windDir/(180.0f * M_PI),
+        1.0f - damping,windAlign,oceanDepth,seed);*/
 		m_ocean = new drw::Ocean(rd->m_resolution,rd->m_resolution,rd->m_size/float(rd->m_resolution),rd->m_size/float(rd->m_resolution),
-								rd->m_windSpeed,rd->m_shortestWave,0.00001,rd->m_windDir/180.0f * M_PI,
-								0.5f,rd->m_windAlign,rd->m_oceanDepth,1);
+								rd->m_windSpeed,rd->m_shortestWave,rd->m_waveHeight,rd->m_windDir/180.0f * M_PI,
+								rd->m_damping,rd->m_windAlign,rd->m_oceanDepth,rd->m_seed);
 		
 		if(rd->m_outputType == 0)
 			m_context = m_ocean->new_context(true,true,false,false);

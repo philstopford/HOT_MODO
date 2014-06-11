@@ -12,7 +12,6 @@
 #include <string>
 #include <math.h>
 
-
 #include "Ocean.h"
 
 namespace hotModoDeformer {	// disambiguate everything with a namespace
@@ -88,6 +87,8 @@ class CChanState : public CLxObject
 		float waveHeight;
 		float shortestWave;
 		float oceanDepth;
+		float damping;
+		float seed;
 		float time;
 
 		drw::Ocean        *m_ocean;
@@ -99,8 +100,8 @@ class CChanState : public CLxObject
 		drw::Ocean* reBuildOceanData()
 		{
 			return new drw::Ocean(resolution,resolution,size/float(resolution),size/float(resolution),
-							  windSpeed,shortestWave,0.00001,windDir/180.0f * M_PI,
-							  0.5f,windAlign,oceanDepth,1);
+							  windSpeed,shortestWave,waveHeight,windDir/(180.0f * M_PI),
+							  1.0f - damping,windAlign,oceanDepth,seed);
 		}
 
 
@@ -124,8 +125,10 @@ class CChanState : public CLxObject
 			eval.AddChan (item, "waveHeight");
 			eval.AddChan (item, "shortestWave");
 			eval.AddChan (item, "oceanDepth");
+			eval.AddChan (item, "damping");
+			eval.AddChan (item, "seed");
 
-			eval.AddChan (item, "time");
+			eval.AddTime ();
 
 			eval.AddChan (item, LXsICHAN_XFRMCORE_WORLDMATRIX);
         }
@@ -138,11 +141,13 @@ class CChanState : public CLxObject
             if (enabled) 
 			{
                 attr.String (index++, name);
-				//index++;
                 gain = attr.Float (index++);
 				
 				resolution  = attr.Int  (index++);
-				if(resolution > 12) resolution = 12;
+				if(resolution > 12)
+                {
+                    resolution = 12;
+                }
 				resolution = (int) pow(2.0,resolution);
 				
 				
@@ -159,6 +164,8 @@ class CChanState : public CLxObject
 				waveHeight = attr.Float (index++);
 				shortestWave = attr.Float (index++);
 				oceanDepth = attr.Float (index++);
+				damping = attr.Float (index++);
+				seed = attr.Float (index++);
 				
 				time = attr.Float (index++);
 
@@ -172,6 +179,15 @@ class CChanState : public CLxObject
 			if(m_ocean != NULL)
 			{
 				ocean_scale = m_ocean->get_height_normalize_factor();
+                /*   void update(float t,
+                OceanContext& r,
+                bool do_heightfield,
+                bool do_chop,
+                bool do_normal,
+                bool do_jacobian,
+                float scale,
+                float chop_amount)
+                */
 				m_ocean->update(time, *m_context, true,true,false,true, ocean_scale*waveHeight,chop);
 			}
 		}
@@ -226,40 +242,46 @@ class CInfluence : public CLxMeshInfluence
         {
             LXtFVector		 offF, posF, uv;
 			if(!cur.enabled) return;
-			//float time = (float)selSrv.GetTme();
-			//double t = selSrv.GetTime();
-			//float time = cur.time;
 
 			point.Pos (posF);
 
 			//get uvs
-			if(gotUvs) point.MapValue (map_id, uv);
+			if(gotUvs)
+            {
+                point.MapValue (map_id, uv);
+            }
 				
 			if(cur.m_context) 
 			{
-				float p[2], result[3];
-				p[0] = (1.0f/cur.globalScale)*uv[0]*cur.scaleU;
-				p[1] = (1.0f/cur.globalScale)*uv[1]*cur.scaleV;
-				cur.m_context->eval2_xz(p[0],p[1]); //, result); // too many args, so commented out _ PHIL
-
+				float p[2];
+				p[0] = (float)posF[0]; // (cur.globalScale)*uv[0]*cur.scaleU;
+				p[1] = (float)posF[2]; // (cur.globalScale)*uv[1]*cur.scaleV;
+				// Use eval_xz for no interpolation.
+				cur.m_context->eval_xz(p[0],p[1]);
+                
 				float jM = 0;
 				float jP = 0;
 				point.ClearMapValue(jacobianMin_id);
 				point.SetMapValue(jacobianMin_id, &jM);
 				point.ClearMapValue(jacobianPos_id);
 				point.SetMapValue(jacobianPos_id, &jP);
-				
 
-
-				offF[0] = posF[0]+ cur.m_context->disp[0];
-				offF[1] = posF[1]+ cur.m_context->disp[1];
-				offF[2] = posF[2]+ cur.m_context->disp[2];
-
-				LXx_VSUB (offF, posF);
+                // Implies choppiness is active, using the disp property.
+                if (cur.chop > 0)
+                {
+                    offF[0] = cur.m_context->disp[0]; // X
+                    offF[1] = cur.m_context->disp[1]; // Y
+                    offF[2] = cur.m_context->disp[2]; // Z
+                } else {
+                    offF[0] = 0;
+                    offF[1] = cur.m_context->disp[1]; // Y
+                    offF[2] = 0;
+                }
 
                 LXtFVector	 tmp;
 
-                lx::MatrixMultiply (tmp, cur.xfrm, offF);
+                //lx::MatrixMultiply (tmp, cur.xfrm, offF);
+                LXx_VCPY (tmp, offF);
                 LXx_VSCL3 (offset, tmp, cur.gain * weight);
 				//LXx_VSCL3 (offset, offF, cur.gain * weight);
 				/*offset[0] = 0;
@@ -291,20 +313,25 @@ class CModifierElement : public CLxItemModifierElement
 		float waveHeight;
 		float shortestWave;
 		float oceanDepth;
+		float damping;
+		float seed;
 
 		CModifierElement()
 		{
 			ocean = NULL; 
 			context = NULL;
-			resolution = -1;
+			ocean_scale = 1.0f;
+			resolution = 6.0f;
 			size = 200.0f;
-			windSpeed = 2.0f;
+			windSpeed = 30.0f;
 			windDir =0.0f;
 			windAlign =2.0f;
-			chop = 0.5f;
-			waveHeight = 5.0f;
-			shortestWave = 0.001f;
+			chop = 1.78f;
+			waveHeight = 1.6f;
+			shortestWave = 0.02f;
 			oceanDepth = 200.0f;			
+			damping = 0.5f;
+			seed = 1.0f;
 		}
 
 		~CModifierElement()
@@ -345,6 +372,8 @@ class CModifierElement : public CLxItemModifierElement
 				infl->cur.chop != chop ||
 				infl->cur.shortestWave != shortestWave ||
 				infl->cur.oceanDepth != oceanDepth ||
+				infl->cur.damping != damping ||
+				infl->cur.seed != seed ||
 				ocean == NULL )
 			{
 				if (ocean)
@@ -366,6 +395,8 @@ class CModifierElement : public CLxItemModifierElement
 				chop = infl->cur.chop;
 				shortestWave = infl->cur.shortestWave;
 				oceanDepth = infl->cur.oceanDepth;
+				damping = infl->cur.damping;
+				seed = infl->cur.seed;
 				infl->cur.setUpOceanPtrs(ocean, context);
 			}
 			else infl->cur.setUpOceanPtrs(ocean, context);
