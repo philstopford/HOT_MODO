@@ -11,10 +11,13 @@
 #include <lx_select.hpp>
 #include <string>
 #include <math.h>
+#include <mutex>
 
 #include "Ocean.h"
 
 namespace hotModoDeformer {	// disambiguate everything with a namespace
+
+std::mutex myMutex; // global variable
 
 #define SRVNAME_ITEMTYPE		"hotModoDeform"
 #define SRVNAME_MODIFIER		"hotModoDeform"
@@ -240,6 +243,7 @@ class CInfluence : public CLxMeshInfluence
 
 		void Offset (CLxUser_Point &point, float weight, LXtFVector	offset)	LXx_OVERRIDE
         {
+            myMutex.lock(); // or, to be exception-safe, use std::lock_guard
             LXtFVector		 offF, posF, uv;
 			if(!cur.enabled) return;
 
@@ -257,7 +261,7 @@ class CInfluence : public CLxMeshInfluence
 				p[0] = (float)posF[0]; // (cur.globalScale)*uv[0]*cur.scaleU;
 				p[1] = (float)posF[2]; // (cur.globalScale)*uv[1]*cur.scaleV;
 				// Use eval_xz for no interpolation.
-				cur.m_context->eval_xz(p[0],p[1]);
+				cur.m_context->eval2_xz(p[0],p[1]);
                 
 				float jM = 0;
 				float jP = 0;
@@ -280,23 +284,16 @@ class CInfluence : public CLxMeshInfluence
 
                 LXtFVector	 tmp;
 
-                //lx::MatrixMultiply (tmp, cur.xfrm, offF);
-                LXx_VCPY (tmp, offF);
+                lx::MatrixMultiply (tmp, cur.xfrm, offF);
                 LXx_VSCL3 (offset, tmp, cur.gain * weight);
-				//LXx_VSCL3 (offset, offF, cur.gain * weight);
 				/*offset[0] = 0;
 				offset[1] = cur.m_context->disp[1];
 				offset[2] = 0;*/
 			}
+            myMutex.unlock();
         }
 };
-
-
-
-/*
- * The modifier operates on all items of this type, and sets the mesh influence
- * channel to an object allocated using the input parameters for the modifier.
- */
+    
 class CModifierElement : public CLxItemModifierElement
 {
     public:
@@ -315,10 +312,10 @@ class CModifierElement : public CLxItemModifierElement
 		float oceanDepth;
 		float damping;
 		float seed;
-
+    
 		CModifierElement()
 		{
-			ocean = NULL; 
+			ocean = NULL;
 			context = NULL;
 			ocean_scale = 1.0f;
 			resolution = 6.0f;

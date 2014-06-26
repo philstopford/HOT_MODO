@@ -1,0 +1,109 @@
+--
+
+/*
+ *	Define a struct. This is just an arbitrary container for
+ *	whatever values you want to store in the thread slot.
+ */
+
+struct MyThreadData
+{
+	MyThreadData () : someSharedValue (0.0), isValid (false) {}
+
+	double		someSharedValue;
+	bool		isValid;
+};
+
+/*
+ *	The ThreadSlotClient is a COM object that allows the slot to
+ *	allocated and freed. This basically involves creating a new
+ *	instance of your struct, returning it from the function. Then
+ *	in Free, you delete the data.
+ */
+
+class MyThreadClient : public CLxImpl_ThreadSlotClient, public CLxSingletonPolymorph
+{
+	public:
+		LXxSINGLETON_METHOD
+
+		MyThreadClient ()
+		{
+			AddInterface (new CLxIfc_ThreadSlotClient <MyThreadClient>);
+		}
+
+		LxResult  tsc_Alloc (void **value)
+		{
+			MyThreadData*	threadData = new MyThreadData;
+			
+			if (!threadData)
+				return LXe_OUTOFMEMORY;
+
+			value[0] = threadData;
+			
+			return LXe_OK;
+		}
+
+		LxResult tsc_Free (void *value)
+		{
+			if (value)
+			{
+				MyThreadData* threadData = (MyThreadData*) value;
+				delete threadData;
+			}
+			
+			return LXe_OK;
+		}
+};
+
+/*
+ *	Create a static instance of the ThreadClient COM object. It's a
+ *	singleton, so there should only be one in the scene. 
+ */
+
+static MyThreadClient		sThreadClient;
+
+/*
+ *	This class is just an example of how the ThreadSlot would then
+ *	be allocated and used. You could implement something similar in
+ *	a modifier or whatever. You need somewhere to setup the slot,
+ *	this could be in your modifiers alloc function, where you are
+ *	defining the channel inputs and outputs.
+ *	Then... you need to use the cache, this is done by simply calling
+ *	Get on the ThreadSlot you allocated with NewSlot. It will return
+ * 	a pointer to the struct that you created in the Alloc method of
+ *	your ThreadSlotClient class. The first time it's called, it will 
+ *	be unset, so you can see I check if it's valid, if it's not, I
+ *	set the values, if it is, we just use them.
+ */
+
+class MyClass : public CLxImpl...
+{
+	public:
+		void SomeSetupFunction ()
+		{
+			thr_svc.NewSlot (thr_slot, sThreadClient);
+		}
+
+		void SomeEvaluateFunction ()
+		{
+			double		someSharedValue = 0.0;
+			MyThreadData*	threadData = NULL;
+
+			if (thr_slot.test ())
+				thr_slot.Get ((void**)&threadData);
+
+			if (threadData)
+			{
+				if (!threadData->isValid)
+				{
+					threadData->someSharedValue = 1.0;
+					threadData->isValid = true;
+				}
+
+				someSharedValue = threadData->someSharedValue;
+			}
+		}
+
+	private:
+		CLxUser_ThreadService		thr_svc;
+		CLxUser_ThreadSlot		thr_slot;
+};
