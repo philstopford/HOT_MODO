@@ -243,7 +243,8 @@ class CInfluence : public CLxMeshInfluence
 
 		void Offset (CLxUser_Point &point, float weight, LXtFVector	offset)	LXx_OVERRIDE
         {
-            myMutex.lock(); // or, to be exception-safe, use std::lock_guard
+	        float       result[3];
+            // myMutex.lock(); // or, to be exception-safe, use std::lock_guard
             LXtFVector		 offF, posF, uv;
 			if(!cur.enabled) return;
 
@@ -260,8 +261,8 @@ class CInfluence : public CLxMeshInfluence
 				float p[2];
 				p[0] = (float)posF[0]; // (cur.globalScale)*uv[0]*cur.scaleU;
 				p[1] = (float)posF[2]; // (cur.globalScale)*uv[1]*cur.scaleV;
-				// Use eval_xz for no interpolation.
-				cur.m_context->eval2_xz(p[0],p[1]);
+				// Overloaded to get disp back from the HOT library in result[].
+				cur.m_context->eval2_xz(p[0],p[1], result);
                 
 				float jM = 0;
 				float jP = 0;
@@ -273,12 +274,12 @@ class CInfluence : public CLxMeshInfluence
                 // Implies choppiness is active, using the disp property.
                 if (cur.chop > 0)
                 {
-                    offF[0] = cur.m_context->disp[0]; // X
-                    offF[1] = cur.m_context->disp[1]; // Y
-                    offF[2] = cur.m_context->disp[2]; // Z
+                    offF[0] = result[0]; // cur.m_context->disp[0]; // X
+                    offF[1] = result[1]; // cur.m_context->disp[1]; // Y
+                    offF[2] = result[2]; // cur.m_context->disp[2]; // Z
                 } else {
                     offF[0] = 0;
-                    offF[1] = cur.m_context->disp[1]; // Y
+                    offF[1] = result[1]; // cur.m_context->disp[1]; // Y
                     offF[2] = 0;
                 }
 
@@ -290,7 +291,7 @@ class CInfluence : public CLxMeshInfluence
 				offset[1] = cur.m_context->disp[1];
 				offset[2] = 0;*/
 			}
-            myMutex.unlock();
+            // myMutex.unlock();
         }
 };
     

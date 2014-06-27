@@ -74,7 +74,7 @@
 #ifndef WIN32
 #define BZ_THREADSAFE
 #endif // WIN32
-#include "blitz/array.h"
+#include <blitz/array.h>
 
 // OpenEXR includes a nice reentrant gaussian random number generator (http://www.openexr.com/)
 #include "ImathRandom.h"
@@ -311,6 +311,67 @@ class OceanContext : public UsingThreadedFFTW
 #undef BILERP
   }
 
+    void eval_uv(float u,float v, float result[3])
+    {
+        int i0,i1,j0,j1;
+        float frac_x,frac_z;
+        
+        // first wrap the texture so 0 <= (u,v) < 1
+        u = fmod(u,1.0f);
+        v = fmod(v,1.0f);
+        
+        if (u < 0) u += 1.0f;
+        if (v < 0) v += 1.0f;
+        
+        float uu = u * _M;
+        float vv = v * _N;
+        
+        i0 = (int)floor(uu);
+        j0 = (int)floor(vv);
+        
+        i1 = (i0 + 1);
+        j1 = (j0 + 1);
+        
+        frac_x = uu - i0;
+        frac_z = vv - j0;
+        
+        i0 = i0 % _M;
+        j0 = j0 % _N;
+        
+        i1 = i1 % _M;
+        j1 = j1 % _N;
+        
+        
+#define BILERP(m) (lerp(lerp(m(i0,j0),m(i1,j0),frac_x),lerp(m(i0,j1),m(i1,j1),frac_x),frac_z))
+        {
+            if (_do_disp_y)
+            {
+                result[1] = BILERP(_disp_y);
+            }
+            if (_do_normals)
+            {
+                normal[0] = BILERP(_N_x);
+                normal[1] = BILERP(_N_y);
+                normal[2] = BILERP(_N_z);
+            }
+            if (_do_chop)
+            {
+                result[0] = BILERP(_disp_x);
+                result[2] = BILERP(_disp_z);
+            }
+            else
+            {
+                result[0] = 0.0;
+                result[2] = 0.0;
+            }
+            if (_do_jacobian)
+            {
+                compute_eigenstuff(BILERP(_Jxx),BILERP(_Jzz),BILERP(_Jxz));
+            }
+        }
+#undef BILERP
+    }
+
   // use catmullrom interpolation rather than linear
   void eval2_uv(float u,float v)
   {
@@ -389,6 +450,88 @@ class OceanContext : public UsingThreadedFFTW
 
   }
 
+    void eval2_uv(float u,float v, float result[3])
+    {
+        int i0,i1,i2,i3,j0,j1,j2,j3;
+        float frac_x,frac_z;
+        
+        // first wrap the texture so 0 <= (u,v) < 1
+        u = fmod(u,1.0f);
+        v = fmod(v,1.0f);
+        
+        if (u < 0) u += 1.0f;
+        if (v < 0) v += 1.0f;
+        
+        float uu = u * _M;
+        float vv = v * _N;
+        
+        i1 = (int)floor(uu);
+        j1 = (int)floor(vv);
+        
+        i2 = (i1 + 1);
+        j2 = (j1 + 1);
+        
+        frac_x = uu - i1;
+        frac_z = vv - j1;
+        
+        i1 = i1 % _M;
+        j1 = j1 % _N;
+        
+        i2 = i2 % _M;
+        j2 = j2 % _N;
+        
+        i0 = (i1-1);
+        i3 = (i2+1);
+        i0 = i0 <   0 ? i0 + _M : i0;
+        i3 = i3 >= _M ? i3 - _M : i3;
+        
+        j0 = (j1-1);
+        j3 = (j2+1);
+        j0 = j0 <   0 ? j0 + _N : j0;
+        j3 = j3 >= _N ? j3 - _N : j3;
+        
+#define INTERP(m) catrom(catrom(m(i0,j0),m(i1,j0),m(i2,j0),m(i3,j0),frac_x), \
+catrom(m(i0,j1),m(i1,j1),m(i2,j1),m(i3,j1),frac_x), \
+catrom(m(i0,j2),m(i1,j2),m(i2,j2),m(i3,j2),frac_x), \
+catrom(m(i0,j3),m(i1,j3),m(i2,j3),m(i3,j3),frac_x), \
+frac_z)
+        
+        {
+            if (_do_disp_y)
+            {
+                // disp[1] = INTERP(_disp_y) ;
+                result[1] = INTERP(_disp_y);
+            }
+            if (_do_normals)
+            {
+                normal[0] = INTERP(_N_x);
+                normal[1] = INTERP(_N_y);
+                normal[2] = INTERP(_N_z);
+            }
+            if (_do_chop)
+            {
+                //disp[0] = INTERP(_disp_x);
+                //disp[2] = INTERP(_disp_z);
+                result[0] = INTERP(_disp_x);
+                result[2] = INTERP(_disp_z);
+            }
+            else
+            {
+                // disp[0] = 0.0;
+                // disp[2] = 0.0;
+                result[0] = 0.0;
+                result[2] = 0.0;
+            }
+            
+            if (_do_jacobian)
+            {
+                compute_eigenstuff(INTERP(_Jxx),INTERP(_Jzz),INTERP(_Jxz));
+            }
+        }
+#undef INTERP
+        
+    }
+
   inline void compute_eigenstuff(const my_float& jxx,const my_float& jzz,const my_float& jxz)
   {
     my_float a,b,qplus,qminus;
@@ -422,6 +565,17 @@ class OceanContext : public UsingThreadedFFTW
   {
     assert(_Lx != 0 && _Lz  != 0);
     eval2_uv(x/_Lx,z/_Lz);
+  }
+
+  void eval_xz(float x,float z,float result[3])
+  {
+      assert(_Lx != 0 && _Lz  != 0);
+      eval_uv(x/_Lx,z/_Lz, result);
+  }
+  void eval2_xz(float x,float z,float result[3])
+  {
+      assert(_Lx != 0 && _Lz  != 0);
+      eval2_uv(x/_Lx,z/_Lz, result);
   }
 
   // note that this doesn't wrap properly for i,j < 0, but its
