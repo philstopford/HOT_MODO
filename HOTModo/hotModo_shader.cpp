@@ -32,7 +32,7 @@ LxResult hotModoShader::cmt_ReadChannels(ILxUnknownID attr, void  **ppvData)
 	if(rd->m_ocean == NULL)
 	{
 		rd->m_ocean = new drw::Ocean(rd->m_resolution,rd->m_resolution,rd->m_size/float(rd->m_resolution),rd->m_size/float(rd->m_resolution),
-								rd->m_windSpeed,rd->m_shortestWave,0.00001,rd->m_windDir/180.0f * M_PI,
+								rd->m_windSpeed,rd->m_shortestWave,0.00001,rd->m_windDir/180.0f * LXx_PI,
 								0.5f,rd->m_windAlign,rd->m_oceanDepth,1);
 
 		rd->m_context = rd->m_ocean->new_context(true,true,true,true);

@@ -63,21 +63,6 @@ LxResult CPackage::pkg_SetupChannels(ILxUnknownID addChan)
 	ac.NewChannel  ("resolution",	LXsTYPE_INTEGER);
 	ac.SetDefault  (0.0, 6);
 
-	ac.NewChannel  ("globalScale",	LXsTYPE_FLOAT);
-	ac.SetDefault  (1.0f, 0);
-
-	ac.NewChannel  ("scaleU",	LXsTYPE_FLOAT);
-	ac.SetDefault  (1.0f, 0);
-
-	ac.NewChannel  ("scaleV",	LXsTYPE_FLOAT);
-	ac.SetDefault  (1.0f, 0);
-
-	ac.NewChannel  ("offsetU",	LXsTYPE_FLOAT);
-	ac.SetDefault  (0.0f, 0);
-
-	ac.NewChannel  ("offsetV",	LXsTYPE_FLOAT);
-	ac.SetDefault  (0.0f, 0);
-
 	ac.NewChannel  ("oceanSize",	LXsTYPE_FLOAT);
 	ac.SetDefault  (200.0f, 0);
 

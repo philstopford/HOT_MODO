@@ -1,7 +1,6 @@
 #ifndef H_NOT_MODO_TEXTURE
 #define H_NOT_MODO_TEXTURE
 
-
 #include <lx_shade.hpp>
 #include <lx_vector.hpp>
 #include <lx_package.hpp>
@@ -17,7 +16,6 @@
 
 #include "Ocean.h"
 
-#define M_PI        3.14159265358979323846	
 /*
  * ----------------------------------------------------------------
  * Value texture class

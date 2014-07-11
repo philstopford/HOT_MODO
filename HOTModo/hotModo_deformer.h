@@ -23,8 +23,6 @@ std::mutex myMutex; // global variable
 #define SRVNAME_MODIFIER		"hotModoDeform"
 #define SPWNAME_INSTANCE		"hotModo.inst"
 #define Cs_MORPH_MAPNAME		LXsICHAN_MORPHDEFORM_MAPNAME
-#define M_PI        3.14159265358979323846	
-
 
 class CPackage;
 
@@ -103,7 +101,7 @@ class CChanState : public CLxObject
 		drw::Ocean* reBuildOceanData()
 		{
 			return new drw::Ocean(resolution,resolution,size/float(resolution),size/float(resolution),
-							  windSpeed,shortestWave,waveHeight,windDir/(180.0f * M_PI),
+							  windSpeed,shortestWave,waveHeight,windDir/(180.0f * LXx_PI),
 							  1.0f - damping,windAlign,oceanDepth,seed);
 		}
 
@@ -115,11 +113,6 @@ class CChanState : public CLxObject
             eval.AddChan (item, "gain");
             eval.AddChan (item, "resolution");
 
-			eval.AddChan (item, "globalScale");
-			eval.AddChan (item, "scaleU");
-			eval.AddChan (item, "scaleV");
-			eval.AddChan (item, "offsetU");
-			eval.AddChan (item, "offsetV");
 			eval.AddChan (item, "oceanSize");
 			eval.AddChan (item, "windSpeed");
 			eval.AddChan (item, "windDir");
@@ -153,13 +146,7 @@ class CChanState : public CLxObject
                 }
 				resolution = (int) pow(2.0,resolution);
 				
-				
-				globalScale = attr.Float (index++);
-				scaleU = attr.Float (index++);
-				scaleV = attr.Float (index++);
-				offsetU = attr.Float (index++);
-				offsetV = attr.Float (index++);
-				size = attr.Float (index++);
+                size = attr.Float (index++);
 				windSpeed = attr.Float (index++);
 				windDir = attr.Float (index++);
 				windAlign = attr.Float (index++);
@@ -243,21 +230,21 @@ class CInfluence : public CLxMeshInfluence
 
 		void Offset (CLxUser_Point &point, float weight, LXtFVector	offset)	LXx_OVERRIDE
         {
-	        float       result[3];
-            // myMutex.lock(); // or, to be exception-safe, use std::lock_guard
-            LXtFVector		 offF, posF, uv;
-			if(!cur.enabled) return;
+            LXtFVector		 offF, posF; //, uv;
+			if(!cur.enabled)
+                return;
 
 			point.Pos (posF);
 
 			//get uvs
-			if(gotUvs)
+			/* if(gotUvs)
             {
                 point.MapValue (map_id, uv);
-            }
+            }*/
 				
 			if(cur.m_context) 
 			{
+                float result[3];
 				float p[2];
 				p[0] = (float)posF[0]; // (cur.globalScale)*uv[0]*cur.scaleU;
 				p[1] = (float)posF[2]; // (cur.globalScale)*uv[1]*cur.scaleV;
@@ -287,11 +274,7 @@ class CInfluence : public CLxMeshInfluence
 
                 lx::MatrixMultiply (tmp, cur.xfrm, offF);
                 LXx_VSCL3 (offset, tmp, cur.gain * weight);
-				/*offset[0] = 0;
-				offset[1] = cur.m_context->disp[1];
-				offset[2] = 0;*/
 			}
-            // myMutex.unlock();
         }
 };
     
@@ -360,7 +343,8 @@ class CModifierElement : public CLxItemModifierElement
 
             infl->cur.Read (attr, index + 1);
 			//early out
-			if(!infl->cur.enabled) return LXe_OK;
+			if(!infl->cur.enabled)
+                return LXe_OK;
 
 			if(infl->cur.resolution != resolution || 
 				infl->cur.size != size ||

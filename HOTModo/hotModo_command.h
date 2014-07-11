@@ -84,7 +84,7 @@ class CItemSelectionTracker :
             void			*pkt;
 
             scan = 0;
-            while (scan = srv_sel.ScanLoopCurrent (scan, selID_item, &pkt))
+            while ((scan = srv_sel.ScanLoopCurrent (scan, selID_item, &pkt)))
 			{
                     pkt_item.GetItem (pkt, item);
                     if (vis.Item (item))
@@ -250,9 +250,11 @@ class CExecItemVisitor : public CItemVisitor
             scene.SetChannels (chan, LXs_ACTIONLAYER_EDIT, 0.0);
             if (LXx_OK (item.ChannelLookup (Cs_MORPH_MAPNAME, &nameIdx)))
                     if(mapName=="(none)")
+                    {
                             chan.Set (item, nameIdx, "");
-                    else
+                    } else {
                             chan.Set (item, nameIdx, mapName.c_str());
+                    }
             return false;
         }
 };
