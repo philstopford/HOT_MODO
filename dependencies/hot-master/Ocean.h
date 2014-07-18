@@ -532,6 +532,89 @@ frac_z)
         
     }
 
+    void eval2_uv(float u,float v, float result[3], float normals[3], float Jvalues[2], float Eigenminus[3], float Eigenplus[3])
+    {
+        int i0,i1,i2,i3,j0,j1,j2,j3;
+        float frac_x,frac_z;
+        
+        // first wrap the texture so 0 <= (u,v) < 1
+        u = fmod(u,1.0f);
+        v = fmod(v,1.0f);
+        
+        if (u < 0) u += 1.0f;
+        if (v < 0) v += 1.0f;
+        
+        float uu = u * _M;
+        float vv = v * _N;
+        
+        i1 = (int)floor(uu);
+        j1 = (int)floor(vv);
+        
+        i2 = (i1 + 1);
+        j2 = (j1 + 1);
+        
+        frac_x = uu - i1;
+        frac_z = vv - j1;
+        
+        i1 = i1 % _M;
+        j1 = j1 % _N;
+        
+        i2 = i2 % _M;
+        j2 = j2 % _N;
+        
+        i0 = (i1-1);
+        i3 = (i2+1);
+        i0 = i0 <   0 ? i0 + _M : i0;
+        i3 = i3 >= _M ? i3 - _M : i3;
+        
+        j0 = (j1-1);
+        j3 = (j2+1);
+        j0 = j0 <   0 ? j0 + _N : j0;
+        j3 = j3 >= _N ? j3 - _N : j3;
+        
+#define INTERP(m) catrom(catrom(m(i0,j0),m(i1,j0),m(i2,j0),m(i3,j0),frac_x), \
+catrom(m(i0,j1),m(i1,j1),m(i2,j1),m(i3,j1),frac_x), \
+catrom(m(i0,j2),m(i1,j2),m(i2,j2),m(i3,j2),frac_x), \
+catrom(m(i0,j3),m(i1,j3),m(i2,j3),m(i3,j3),frac_x), \
+frac_z)
+        
+        {
+            if (_do_disp_y)
+            {
+                // disp[1] = INTERP(_disp_y) ;
+                result[1] = INTERP(_disp_y);
+            }
+            if (_do_normals)
+            {
+                normals[0] = INTERP(_N_x);
+                normals[1] = INTERP(_N_y);
+                normals[2] = INTERP(_N_z);
+            }
+            if (_do_chop)
+            {
+                //disp[0] = INTERP(_disp_x);
+                //disp[2] = INTERP(_disp_z);
+                result[0] = INTERP(_disp_x);
+                result[2] = INTERP(_disp_z);
+            }
+            else
+            {
+                // disp[0] = 0.0;
+                // disp[2] = 0.0;
+                result[0] = 0.0;
+                result[2] = 0.0;
+            }
+            
+            if (_do_jacobian)
+            {
+                compute_eigenstuff(INTERP(_Jxx),INTERP(_Jzz),INTERP(_Jxz), Jvalues, Eigenminus, Eigenplus);
+            }
+        }
+#undef INTERP
+        
+    }
+    
+    
   inline void compute_eigenstuff(const my_float& jxx,const my_float& jzz,const my_float& jxz)
   {
     my_float a,b,qplus,qminus;
@@ -556,6 +639,30 @@ frac_z)
     Eminus[2] = qminus/b;
   }
 
+    inline void compute_eigenstuff(const my_float& jxx,const my_float& jzz,const my_float& jxz, float Jvalues[2], float Eigenminus[3], float Eigenplus[3])
+    {
+        my_float a,b,qplus,qminus;
+        a = jxx + jzz;
+        b = sqrt((jxx - jzz)*(jxx - jzz) + 4 * jxz * jxz);
+        
+        Jvalues[0] = 0.5*(a-b);
+        Jvalues[1]  = 0.5*(a+b);
+        
+        qplus  = (Jvalues[0]  - jxx)/jxz;
+        qminus = (Jvalues[1] - jxx)/jxz;
+        
+        a = sqrt(1 + qplus*qplus);
+        b = sqrt(1 + qminus*qminus);
+        
+        Eigenplus[0] = 1.0/ a;
+        Eigenplus[1] = 0.0;
+        Eigenplus[2] = qplus/a;
+        
+        Eigenminus[0] = 1.0/b;
+        Eigenminus[1] = 0.0;
+        Eigenminus[2] = qminus/b;
+    }
+
   void eval_xz(float x,float z)
   {
     assert(_Lx != 0 && _Lz  != 0);
@@ -578,6 +685,12 @@ frac_z)
       eval2_uv(x/_Lx,z/_Lz, result);
   }
 
+  void eval2_xz(float x, float z, float result[3], float normals[3], float Jvalues[2], float Eigenminus[3], float Eigenplus[3])
+    {
+        assert(_Lx != 0 && _Lz  != 0);
+        eval2_uv(x/_Lx,z/_Lz, result, normals, Jvalues, Eigenminus, Eigenplus);
+        
+    }
   // note that this doesn't wrap properly for i,j < 0, but its
   // not really meant for that being just a way to get the raw data out
   // to save in some image format.

@@ -264,7 +264,7 @@ void hotModoTexture::vtx_Evaluate (ILxUnknownID vector, LXpTextureOutput *tOut, 
 
 	if(m_ocean != NULL && m_context != NULL) 
 	{
-		m_context->eval2_xz((tInp->uvw[0] + rd->m_offsetU) * rd->m_scaleU, (tInp->uvw[1] + rd->m_offsetV) *rd->m_scaleV, result);
+		m_context->eval2_xz(tInp->uvw[0], tInp->uvw[1], result);
 
 		tOut->direct   = 1;
 
@@ -273,22 +273,23 @@ void hotModoTexture::vtx_Evaluate (ILxUnknownID vector, LXpTextureOutput *tOut, 
 		{
             // This should really go to the material displacement height, but there's no obvious way to do this from a texture.
             // modo expects textures only to send 0-1 ranged values. :(
-			// float scale = m_ocean_scale*rd->m_waveHeight;
-			float scale = m_ocean_scale*rd->m_waveHeight*rd->m_globalScale*rd->m_gain;
+			float scale = m_ocean_scale*rd->m_waveHeight;
 
 			if(rd->m_outputType == 0)
 			{
                 float result_length = sqrt((result[0]*result[0])+(result[1]*result[1])+(result[2]*result[2]));
                 // Vector displacement usage; set color vector, per Greg D.
-                tOut->color[0][0] = ((result[0]/result_length) + 1)/2; // based on 0.5 being no displacement, 0 being negative and 1 being positive.
-                tOut->color[0][1] = ((result[1]/result_length) + 1)/2;
-                tOut->color[0][2] = ((result[2]/result_length) + 1)/2;
+				/*tInpDsp->dPos[0] = result[0]/result_length;
+				tInpDsp->dPos[1] = result[1]/result_length;
+				tInpDsp->dPos[2] = result[2]/result_length;*/
+                tOut->color[0][0] = result[0]/result_length;
+                tOut->color[0][1] = result[1]/result_length;
+                tOut->color[0][2] = result[2]/result_length;
 
                 // Set by material - except we don't seem to have a way to do this from a texture context.
 				// tInpDsp->amplitude = scale * result_length * rd->m_gain;
-                tInpDsp->max = scale;
                 // Not sure if this enable setting is needed for a color output intended for vector displacement.
-				tInpDsp->enable = true;
+				// tInpDsp->enable = true;
 			}
 			else if(rd->m_outputType == 1)	
 			{	
@@ -322,6 +323,7 @@ void initialize ()
 {
 		hotModoDeformer	:: initialize ();
 		hotModoCommand :: initialize ();
+        hotModoChanModNameSpace:: initialize ();
 
         CLxGenericPolymorph		*srv;
 
