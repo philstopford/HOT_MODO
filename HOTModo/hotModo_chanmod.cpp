@@ -129,19 +129,35 @@ hotModoChanMod::cmod_Allocate (
         chanMod.AddInput (item, chanIdx);
                 
         // Lookup the index of the 'displacement' channel and add it as an output.
-        modItem.ChannelLookup ("displacement", &chanIdx);
+        modItem.ChannelLookup ("displacement.X", &chanIdx);
+        chanMod.AddOutput (item, chanIdx);
+        modItem.ChannelLookup ("displacement.Y", &chanIdx);
+        chanMod.AddOutput (item, chanIdx);
+        modItem.ChannelLookup ("displacement.Z", &chanIdx);
         chanMod.AddOutput (item, chanIdx);
 
         // Lookup the index of the 'normals' channel and add it as an output.
-        modItem.ChannelLookup ("normals", &chanIdx);
+        modItem.ChannelLookup ("normals.X", &chanIdx);
+        chanMod.AddOutput (item, chanIdx);
+        modItem.ChannelLookup ("normals.Y", &chanIdx);
+        chanMod.AddOutput (item, chanIdx);
+        modItem.ChannelLookup ("normals.Z", &chanIdx);
         chanMod.AddOutput (item, chanIdx);
 
         // Lookup the index of the 'foam' channel and add it as an output. Only relevant in Jacobian mode.
-        modItem.ChannelLookup ("foam", &chanIdx);
+        modItem.ChannelLookup ("foam.X", &chanIdx);
+        chanMod.AddOutput (item, chanIdx);
+        modItem.ChannelLookup ("foam.Y", &chanIdx);
+        chanMod.AddOutput (item, chanIdx);
+        modItem.ChannelLookup ("foam.Z", &chanIdx);
         chanMod.AddOutput (item, chanIdx);
 
         // Lookup the index of the 'spray' channel and add it as an output. Only relevant in Jacobian mode.
-        modItem.ChannelLookup ("spray", &chanIdx);
+        modItem.ChannelLookup ("spray.X", &chanIdx);
+        chanMod.AddOutput (item, chanIdx);
+        modItem.ChannelLookup ("spray.Y", &chanIdx);
+        chanMod.AddOutput (item, chanIdx);
+        modItem.ChannelLookup ("spray.Z", &chanIdx);
         chanMod.AddOutput (item, chanIdx);
 
         // Lookup the index of the 'Jplus' channel and add it as an output.
@@ -153,13 +169,23 @@ hotModoChanMod::cmod_Allocate (
         chanMod.AddOutput (item, chanIdx);
 
         // Lookup the index of the 'Eigenplus' channel and add it as an output.
-        modItem.ChannelLookup ("Eigenplus", &chanIdx);
+        modItem.ChannelLookup ("Eigenplus.X", &chanIdx);
+        chanMod.AddOutput (item, chanIdx);
+        modItem.ChannelLookup ("Eigenplus.Y", &chanIdx);
+        chanMod.AddOutput (item, chanIdx);
+        modItem.ChannelLookup ("Eigenplus.Z", &chanIdx);
         chanMod.AddOutput (item, chanIdx);
 
         // Lookup the index of the 'Eigenminus' channel and add it as an output.
-        modItem.ChannelLookup ("Eigenminus", &chanIdx);
+        modItem.ChannelLookup ("Eigenminus.X", &chanIdx);
+        chanMod.AddOutput (item, chanIdx);
+        modItem.ChannelLookup ("Eigenminus.Y", &chanIdx);
+        chanMod.AddOutput (item, chanIdx);
+        modItem.ChannelLookup ("Eigenminus.Z", &chanIdx);
         chanMod.AddOutput (item, chanIdx);
 
+        chanMod.AddTime ();
+    
         return LXe_OK;
 }
 
@@ -259,24 +285,56 @@ hotModoChanMod::cmod_Flags (
                         return LXfCHMOD_INPUT;
         }
 
-        if (LXx_OK (modItem.ChannelLookup ("displacement", &chanIdx))) {
+        if (LXx_OK (modItem.ChannelLookup ("displacement.X", &chanIdx))) {
                 if (index == chanIdx)
                         return LXfCHMOD_OUTPUT;
         }
-
-        if (LXx_OK (modItem.ChannelLookup ("normal", &chanIdx))) {
+        if (LXx_OK (modItem.ChannelLookup ("displacement.Y", &chanIdx))) {
+            if (index == chanIdx)
+                return LXfCHMOD_OUTPUT;
+        }
+        if (LXx_OK (modItem.ChannelLookup ("displacement.Z", &chanIdx))) {
             if (index == chanIdx)
                 return LXfCHMOD_OUTPUT;
         }
 
-        if (LXx_OK (modItem.ChannelLookup ("foam", &chanIdx))) {
+        if (LXx_OK (modItem.ChannelLookup ("normal.X", &chanIdx))) {
+            if (index == chanIdx)
+                return LXfCHMOD_OUTPUT;
+        }
+        if (LXx_OK (modItem.ChannelLookup ("normal.Y", &chanIdx))) {
+            if (index == chanIdx)
+                return LXfCHMOD_OUTPUT;
+        }
+        if (LXx_OK (modItem.ChannelLookup ("normal.Z", &chanIdx))) {
+            if (index == chanIdx)
+                return LXfCHMOD_OUTPUT;
+        }
+
+        if (LXx_OK (modItem.ChannelLookup ("foam.X", &chanIdx))) {
                 if (index == chanIdx)
                         return LXfCHMOD_OUTPUT;
         }
+        if (LXx_OK (modItem.ChannelLookup ("foam.Y", &chanIdx))) {
+            if (index == chanIdx)
+                return LXfCHMOD_OUTPUT;
+        }
+        if (LXx_OK (modItem.ChannelLookup ("foam.Z", &chanIdx))) {
+            if (index == chanIdx)
+                return LXfCHMOD_OUTPUT;
+        }
 
-        if (LXx_OK (modItem.ChannelLookup ("spray", &chanIdx))) {
+        if (LXx_OK (modItem.ChannelLookup ("spray.X", &chanIdx))) {
                 if (index == chanIdx)
                         return LXfCHMOD_OUTPUT;
+        }
+        if (LXx_OK (modItem.ChannelLookup ("spray.Y", &chanIdx))) {
+            if (index == chanIdx)
+                return LXfCHMOD_OUTPUT;
+        }
+        if (LXx_OK (modItem.ChannelLookup ("spray.Z", &chanIdx))) {
+            if (index == chanIdx)
+                return LXfCHMOD_OUTPUT;
         }
 
         if (LXx_OK (modItem.ChannelLookup ("Jplus", &chanIdx))) {
@@ -289,12 +347,28 @@ hotModoChanMod::cmod_Flags (
                 return LXfCHMOD_OUTPUT;
         }
 
-        if (LXx_OK (modItem.ChannelLookup ("Eigenplus", &chanIdx))) {
+        if (LXx_OK (modItem.ChannelLookup ("Eigenplus.X", &chanIdx))) {
+            if (index == chanIdx)
+                return LXfCHMOD_OUTPUT;
+        }
+        if (LXx_OK (modItem.ChannelLookup ("Eigenplus.Y", &chanIdx))) {
+            if (index == chanIdx)
+                return LXfCHMOD_OUTPUT;
+        }
+        if (LXx_OK (modItem.ChannelLookup ("Eigenplus.Z", &chanIdx))) {
             if (index == chanIdx)
                 return LXfCHMOD_OUTPUT;
         }
 
-        if (LXx_OK (modItem.ChannelLookup ("Eigenminus", &chanIdx))) {
+        if (LXx_OK (modItem.ChannelLookup ("Eigenminus.X", &chanIdx))) {
+            if (index == chanIdx)
+                return LXfCHMOD_OUTPUT;
+        }
+        if (LXx_OK (modItem.ChannelLookup ("Eigenminus.Y", &chanIdx))) {
+            if (index == chanIdx)
+                return LXfCHMOD_OUTPUT;
+        }
+        if (LXx_OK (modItem.ChannelLookup ("Eigenminus.Z", &chanIdx))) {
             if (index == chanIdx)
                 return LXfCHMOD_OUTPUT;
         }
@@ -343,13 +417,15 @@ hotModoChanMod::cmod_Evaluate (
     index++;
     od->m_waveHeight=at.Float(index);
     index++;
-    od->m_shortestWave=at.Float(index);
+    od->m_shortestWave=1/at.Float(index); // we do this because modo's UI zeroes very small values, but is happy with very large values.
     index++;
     od->m_oceanDepth=at.Float(index);
     index++;
     od->m_damping=at.Float(index);
     index++;
     od->m_seed=at.Float(index);
+    index++;
+    od->m_time=at.Float(index);
     
 	if( od->m_resolution != m_resolutionCache ||
        od->m_size != m_sizeCache ||
@@ -407,7 +483,6 @@ hotModoChanMod::cmod_Evaluate (
     float Jminus = 0.0;
     float Jplus = 0.0;
     float result[3], displacement[3], normals[3], foam[3], spray[3], Eigenminus[3], Eigenplus[3], Jvalues[2];
-    LXtFVector v_displacement, v_normals, v_foam, v_spray, v_Eigenminus, v_Eigenplus;
 
     // We'll need a seriously overloaded function here to cover all bases due to threading :/
     m_context->eval2_xz(od->m_x, od->m_z, result, normals, Jvalues, Eigenminus, Eigenplus);
@@ -467,32 +542,47 @@ hotModoChanMod::cmod_Evaluate (
             Eigenplus[i] = 0.0;
         }
     }
-    for (int i = 0; i <= 2; i++)
-    {
-        v_displacement[i] = displacement[i];
-        v_normals[i] = normals[i];
-        v_foam[i] = foam[i];
-        v_spray[i] = spray[i];
-        v_Eigenminus[i] = Eigenminus[i];
-        v_Eigenplus[i] = Eigenplus[i];
-    }
 
     int o_index = 0;
-    chanMod.WriteOutputVal (attr, o_index, (void **) v_displacement); // vector
+    chanMod.WriteOutputFloat (attr, o_index, displacement[0]); // vector
     o_index++;
-    chanMod.WriteOutputVal (attr, o_index, (void **) v_normals); // vector
+    chanMod.WriteOutputFloat (attr, o_index, displacement[1]); // vector
     o_index++;
-    chanMod.WriteOutputVal (attr, o_index, (void **) v_foam); // vector
+    chanMod.WriteOutputFloat (attr, o_index, displacement[2]); // vector
     o_index++;
-    chanMod.WriteOutputVal (attr, o_index, (void **) v_spray); // vector
+    chanMod.WriteOutputFloat (attr, o_index, normals[0]); // vector
+    o_index++;
+    chanMod.WriteOutputFloat (attr, o_index, normals[1]); // vector
+    o_index++;
+    chanMod.WriteOutputFloat (attr, o_index, normals[2]); // vector
+    o_index++;
+    chanMod.WriteOutputFloat (attr, o_index, foam[0]); // vector
+    o_index++;
+    chanMod.WriteOutputFloat (attr, o_index, foam[1]); // vector
+    o_index++;
+    chanMod.WriteOutputFloat (attr, o_index, foam[2]); // vector
+    o_index++;
+    chanMod.WriteOutputFloat (attr, o_index, spray[0]); // vector
+    o_index++;
+    chanMod.WriteOutputFloat (attr, o_index, spray[1]); // vector
+    o_index++;
+    chanMod.WriteOutputFloat (attr, o_index, spray[2]); // vector
     o_index++;
     chanMod.WriteOutputFloat (attr, o_index, Jminus);
     o_index++;
     chanMod.WriteOutputFloat (attr, o_index, Jplus);
     o_index++;
-    chanMod.WriteOutputVal (attr, o_index, (void **) v_Eigenminus); // vector
+    chanMod.WriteOutputFloat (attr, o_index, Eigenminus[0]); // vector
     o_index++;
-    chanMod.WriteOutputVal (attr, o_index, (void **) v_Eigenplus); // vector
+    chanMod.WriteOutputFloat (attr, o_index, Eigenminus[1]); // vector
+    o_index++;
+    chanMod.WriteOutputFloat (attr, o_index, Eigenminus[2]); // vector
+    o_index++;
+    chanMod.WriteOutputFloat (attr, o_index, Eigenplus[0]); // vector
+    o_index++;
+    chanMod.WriteOutputFloat (attr, o_index, Eigenplus[1]); // vector
+    o_index++;
+    chanMod.WriteOutputFloat (attr, o_index, Eigenplus[2]); // vector
 
     return LXe_OK;
 }
@@ -563,7 +653,7 @@ hotModoChanModPackage::pkg_SetupChannels (
         ac.SetDefault (1.6f, 0);        
 
         ac.NewChannel ("shortestWave", LXsTYPE_FLOAT);
-        ac.SetDefault (0.02f, 0);        
+        ac.SetDefault (50.0f, 0);
 
         ac.NewChannel ("oceanDepth", LXsTYPE_FLOAT);
         ac.SetDefault (200.0f, 0);        

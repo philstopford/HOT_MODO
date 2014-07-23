@@ -82,7 +82,7 @@ LxResult CPackage::pkg_SetupChannels(ILxUnknownID addChan)
 	ac.SetDefault  (1.6f, 0);
 
 	ac.NewChannel  ("shortestWave",	LXsTYPE_FLOAT);
-	ac.SetDefault  (0.02f, 0);
+	ac.SetDefault  (50.0f, 0);
 
 	ac.NewChannel  ("oceanDepth",	LXsTYPE_FLOAT);
 	ac.SetDefault  (200.0f, 0);
@@ -170,7 +170,7 @@ void CChanState::Read (CLxUser_Attributes &attr, unsigned index)
 		windAlign = attr.Float (index++);
 		chop = attr.Float (index++);
 		waveHeight = attr.Float (index++);
-		shortestWave = attr.Float (index++);
+		shortestWave = 1 / attr.Float (index++); // we do this because modo's UI zeroes very small values, but is happy with very large values.
 		oceanDepth = attr.Float (index++);
 		damping = attr.Float (index++);
 		seed = attr.Float (index++);

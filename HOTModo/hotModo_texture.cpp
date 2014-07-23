@@ -84,7 +84,7 @@ LxResult hotModoTexture::vtx_SetupChannels (ILxUnknownID addChan)
 	ac.SetDefault  (1.6f, 0);
 
 	ac.NewChannel  ("shortestWave",	LXsTYPE_FLOAT);
-	ac.SetDefault  (0.02f, 0);
+	ac.SetDefault  (50.0f, 0);
 
 	ac.NewChannel  ("oceanDepth",	LXsTYPE_FLOAT);
 	ac.SetDefault  (200.0f, 0);
@@ -161,7 +161,7 @@ LxResult hotModoTexture::vtx_ReadChannels(ILxUnknownID attr, void  **ppvData)
 	rd->m_windAlign = at.Float(m_idx_windAlign);
 	rd->m_chop = at.Float(m_idx_chop);
 	rd->m_waveHeight = at.Float(m_idx_waveHeight);
-	rd->m_shortestWave = at.Float(m_idx_shortestWave);
+	rd->m_shortestWave = 1 / at.Float(m_idx_shortestWave); // we do this because modo's UI zeroes very small values, but is happy with very large values.
 	rd->m_oceanDepth = at.Float(m_idx_oceanDepth);
 	rd->m_damping = at.Float(m_idx_damping);
 	rd->m_seed = at.Float(m_idx_seed);

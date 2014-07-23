@@ -249,12 +249,14 @@ class CExecItemVisitor : public CItemVisitor
             item.GetContext (scene);
             scene.SetChannels (chan, LXs_ACTIONLAYER_EDIT, 0.0);
             if (LXx_OK (item.ChannelLookup (Cs_MORPH_MAPNAME, &nameIdx)))
+            {
                     if(mapName=="(none)")
                     {
                             chan.Set (item, nameIdx, "");
                     } else {
                             chan.Set (item, nameIdx, mapName.c_str());
                     }
+            }
             return false;
         }
 };

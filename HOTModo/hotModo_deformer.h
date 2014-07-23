@@ -156,7 +156,7 @@ class CModifierElement : public CLxItemModifierElement
 			windAlign =2.0f;
 			chop = 1.78f;
 			waveHeight = 1.6f;
-			shortestWave = 0.02f;
+			shortestWave = 50.0f;
 			oceanDepth = 200.0f;			
 			damping = 0.5f;
 			seed = 1.0f;
