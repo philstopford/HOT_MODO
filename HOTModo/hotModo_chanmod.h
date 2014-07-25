@@ -56,6 +56,7 @@ class hotModoChanMod
         void			 cmod_Cleanup (void *data);
         LxResult		 cmod_Evaluate (ILxUnknownID cmod, ILxUnknownID attr, void *data);
 
+        // Indices for ChannelLookup, Flags, etc.
         unsigned m_idx_x;
         unsigned m_idx_z;
         unsigned m_idx_gain;
@@ -93,6 +94,45 @@ class hotModoChanMod
         unsigned m_idx_eigenminusX;
         unsigned m_idx_eigenminusY;
         unsigned m_idx_eigenminusZ;
+    
+        // Indices for ChanMod
+        unsigned cm_idx_x;
+        unsigned cm_idx_z;
+        unsigned cm_idx_gain;
+        unsigned cm_idx_outputType;
+        unsigned cm_idx_resolution;
+        unsigned cm_idx_globalScale;
+        unsigned cm_idx_size;
+        unsigned cm_idx_windSpeed;
+        unsigned cm_idx_windDir;
+        unsigned cm_idx_windAlign;
+        unsigned cm_idx_chop;
+        unsigned cm_idx_waveHeight;
+        unsigned cm_idx_shortestWave;
+        unsigned cm_idx_oceanDepth;
+        unsigned cm_idx_seed;
+        unsigned cm_idx_damping;
+        unsigned cm_idx_time;
+        unsigned cm_idx_displacementX;
+        unsigned cm_idx_displacementY;
+        unsigned cm_idx_displacementZ;
+        unsigned cm_idx_normalsX;
+        unsigned cm_idx_normalsY;
+        unsigned cm_idx_normalsZ;
+        unsigned cm_idx_foamX;
+        unsigned cm_idx_foamY;
+        unsigned cm_idx_foamZ;
+        unsigned cm_idx_sprayX;
+        unsigned cm_idx_sprayY;
+        unsigned cm_idx_sprayZ;
+        unsigned cm_idx_jplus;
+        unsigned cm_idx_jminus;
+        unsigned cm_idx_eigenplusX;
+        unsigned cm_idx_eigenplusY;
+        unsigned cm_idx_eigenplusZ;
+        unsigned cm_idx_eigenminusX;
+        unsigned cm_idx_eigenminusY;
+        unsigned cm_idx_eigenminusZ;
 
         float m_gainCache;
         int	m_resolutionCache;
