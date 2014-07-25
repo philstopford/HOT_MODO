@@ -61,128 +61,127 @@ hotModoChanMod::cmod_Allocate (
 {
         CLxLoc_ChannelModifier	 chanMod (cmod);
         CLxUser_Item		 modItem (item);
-        unsigned int		 chanIdx;
-        
+    
 //	log.Info ("cmod_Allocate Method");
 
         // Lookup the index of the 'input X' channel and add as an input.
-        modItem.ChannelLookup ("inputX", &chanIdx);
-        chanMod.AddInput (item, chanIdx);
+        modItem.ChannelLookup ("inputX", &m_idx_x);
+        chanMod.AddInput (item, m_idx_x);
         // Lookup the index of the 'inputZ' channel and add as an input.
-        modItem.ChannelLookup ("inputZ", &chanIdx);
-        chanMod.AddInput (item, chanIdx);
+        modItem.ChannelLookup ("inputZ", &m_idx_z);
+        chanMod.AddInput (item, m_idx_z);
         
         // Lookup the index of the 'gain' channel and add as an input.
-        modItem.ChannelLookup ("gain", &chanIdx);
-        chanMod.AddInput (item, chanIdx);
+        modItem.ChannelLookup ("gain", &m_idx_gain);
+        chanMod.AddInput (item, m_idx_gain);
 
         // Lookup the index of the 'outputType' channel and add as an input.
-        modItem.ChannelLookup ("outputType", &chanIdx);
-        chanMod.AddInput (item, chanIdx);
+        modItem.ChannelLookup ("outputType", &m_idx_outputType);
+        chanMod.AddInput (item, m_idx_outputType);
 
         // Lookup the index of the 'resolution' channel and add as an input.
-        modItem.ChannelLookup ("resolution", &chanIdx);
-        chanMod.AddInput (item, chanIdx);
+        modItem.ChannelLookup ("resolution", &m_idx_resolution);
+        chanMod.AddInput (item, m_idx_resolution);
 
         // Lookup the index of the 'globalScale' channel and add as an input.
-        modItem.ChannelLookup ("globalScale", &chanIdx);
-        chanMod.AddInput (item, chanIdx);
+        modItem.ChannelLookup ("globalScale", &m_idx_globalScale);
+        chanMod.AddInput (item, m_idx_globalScale);
 
         // Lookup the index of the 'oceanSize' channel and add as an input.
-        modItem.ChannelLookup ("oceanSize", &chanIdx);
-        chanMod.AddInput (item, chanIdx);
+        modItem.ChannelLookup ("oceanSize", &m_idx_size);
+        chanMod.AddInput (item, m_idx_size);
 
         // Lookup the index of the 'windSpeed' channel and add as an input.
-        modItem.ChannelLookup ("windSpeed", &chanIdx);
-        chanMod.AddInput (item, chanIdx);
+        modItem.ChannelLookup ("windSpeed", &m_idx_windSpeed);
+        chanMod.AddInput (item, m_idx_windSpeed);
 
         // Lookup the index of the 'windDir' channel and add as an input.
-        modItem.ChannelLookup ("windDir", &chanIdx);
-        chanMod.AddInput (item, chanIdx);
+        modItem.ChannelLookup ("windDir", &m_idx_windDir);
+        chanMod.AddInput (item, m_idx_windDir);
 
         // Lookup the index of the 'windAlign' channel and add as an input.
-        modItem.ChannelLookup ("windAlign", &chanIdx);
-        chanMod.AddInput (item, chanIdx);
+        modItem.ChannelLookup ("windAlign", &m_idx_windAlign);
+        chanMod.AddInput (item, m_idx_windAlign);
 
         // Lookup the index of the 'chop' channel and add as an input.
-        modItem.ChannelLookup ("chop", &chanIdx);
-        chanMod.AddInput (item, chanIdx);
+        modItem.ChannelLookup ("chop", &m_idx_chop);
+        chanMod.AddInput (item, m_idx_chop);
 
         // Lookup the index of the 'waveHeight' channel and add as an input.
-        modItem.ChannelLookup ("waveHeight", &chanIdx);
-        chanMod.AddInput (item, chanIdx);
+        modItem.ChannelLookup ("waveHeight", &m_idx_waveHeight);
+        chanMod.AddInput (item, m_idx_waveHeight);
 
         // Lookup the index of the 'shortestWave' channel and add as an input.
-        modItem.ChannelLookup ("shortestWave", &chanIdx);
-        chanMod.AddInput (item, chanIdx);
+        modItem.ChannelLookup ("shortestWave", &m_idx_shortestWave);
+        chanMod.AddInput (item, m_idx_shortestWave);
 
         // Lookup the index of the 'oceanDepth' channel and add as an input.
-        modItem.ChannelLookup ("oceanDepth", &chanIdx);
-        chanMod.AddInput (item, chanIdx);
+        modItem.ChannelLookup ("oceanDepth", &m_idx_oceanDepth);
+        chanMod.AddInput (item, m_idx_oceanDepth);
 
         // Lookup the index of the 'damping' channel and add as an input.
-        modItem.ChannelLookup ("damping", &chanIdx);
-        chanMod.AddInput (item, chanIdx);
+        modItem.ChannelLookup ("damping", &m_idx_damping);
+        chanMod.AddInput (item, m_idx_damping);
 
         // Lookup the index of the 'seed' channel and add as an input.
-        modItem.ChannelLookup ("seed", &chanIdx);
-        chanMod.AddInput (item, chanIdx);
+        modItem.ChannelLookup ("seed", &m_idx_seed);
+        chanMod.AddInput (item, m_idx_seed);
                 
         // Lookup the index of the 'displacement' channel and add it as an output.
-        modItem.ChannelLookup ("displacement.X", &chanIdx);
-        chanMod.AddOutput (item, chanIdx);
-        modItem.ChannelLookup ("displacement.Y", &chanIdx);
-        chanMod.AddOutput (item, chanIdx);
-        modItem.ChannelLookup ("displacement.Z", &chanIdx);
-        chanMod.AddOutput (item, chanIdx);
+        modItem.ChannelLookup ("displacement.X", &m_idx_displacementX);
+        chanMod.AddOutput (item, m_idx_displacementX);
+        modItem.ChannelLookup ("displacement.Y", &m_idx_displacementY);
+        chanMod.AddOutput (item, m_idx_displacementY);
+        modItem.ChannelLookup ("displacement.Z", &m_idx_displacementZ);
+        chanMod.AddOutput (item, m_idx_displacementZ);
 
         // Lookup the index of the 'normals' channel and add it as an output.
-        modItem.ChannelLookup ("normals.X", &chanIdx);
-        chanMod.AddOutput (item, chanIdx);
-        modItem.ChannelLookup ("normals.Y", &chanIdx);
-        chanMod.AddOutput (item, chanIdx);
-        modItem.ChannelLookup ("normals.Z", &chanIdx);
-        chanMod.AddOutput (item, chanIdx);
+        modItem.ChannelLookup ("normals.X", &m_idx_normalsX);
+        chanMod.AddOutput (item, m_idx_normalsX);
+        modItem.ChannelLookup ("normals.Y", &m_idx_normalsY);
+        chanMod.AddOutput (item, m_idx_normalsY);
+        modItem.ChannelLookup ("normals.Z", &m_idx_normalsZ);
+        chanMod.AddOutput (item, m_idx_normalsZ);
 
         // Lookup the index of the 'foam' channel and add it as an output. Only relevant in Jacobian mode.
-        modItem.ChannelLookup ("foam.X", &chanIdx);
-        chanMod.AddOutput (item, chanIdx);
-        modItem.ChannelLookup ("foam.Y", &chanIdx);
-        chanMod.AddOutput (item, chanIdx);
-        modItem.ChannelLookup ("foam.Z", &chanIdx);
-        chanMod.AddOutput (item, chanIdx);
+        modItem.ChannelLookup ("foam.X", &m_idx_foamX);
+        chanMod.AddOutput (item, m_idx_foamX);
+        modItem.ChannelLookup ("foam.Y", &m_idx_foamY);
+        chanMod.AddOutput (item, m_idx_foamY);
+        modItem.ChannelLookup ("foam.Z", &m_idx_foamZ);
+        chanMod.AddOutput (item, m_idx_foamZ);
 
         // Lookup the index of the 'spray' channel and add it as an output. Only relevant in Jacobian mode.
-        modItem.ChannelLookup ("spray.X", &chanIdx);
-        chanMod.AddOutput (item, chanIdx);
-        modItem.ChannelLookup ("spray.Y", &chanIdx);
-        chanMod.AddOutput (item, chanIdx);
-        modItem.ChannelLookup ("spray.Z", &chanIdx);
-        chanMod.AddOutput (item, chanIdx);
+        modItem.ChannelLookup ("spray.X", &m_idx_sprayX);
+        chanMod.AddOutput (item, m_idx_sprayX);
+        modItem.ChannelLookup ("spray.Y", &m_idx_sprayY);
+        chanMod.AddOutput (item, m_idx_sprayY);
+        modItem.ChannelLookup ("spray.Z", &m_idx_sprayZ);
+        chanMod.AddOutput (item, m_idx_sprayZ);
 
         // Lookup the index of the 'Jplus' channel and add it as an output.
-        modItem.ChannelLookup ("Jplus", &chanIdx);
-        chanMod.AddOutput (item, chanIdx);
+        modItem.ChannelLookup ("Jplus", &m_idx_jplus);
+        chanMod.AddOutput (item, m_idx_jplus);
 
         // Lookup the index of the 'Jminus' channel and add it as an output.
-        modItem.ChannelLookup ("Jminus", &chanIdx);
-        chanMod.AddOutput (item, chanIdx);
+        modItem.ChannelLookup ("Jminus", &m_idx_jminus);
+        chanMod.AddOutput (item, m_idx_jminus);
 
         // Lookup the index of the 'Eigenplus' channel and add it as an output.
-        modItem.ChannelLookup ("Eigenplus.X", &chanIdx);
-        chanMod.AddOutput (item, chanIdx);
-        modItem.ChannelLookup ("Eigenplus.Y", &chanIdx);
-        chanMod.AddOutput (item, chanIdx);
-        modItem.ChannelLookup ("Eigenplus.Z", &chanIdx);
-        chanMod.AddOutput (item, chanIdx);
+        modItem.ChannelLookup ("Eigenplus.X", &m_idx_eigenplusX);
+        chanMod.AddOutput (item, m_idx_eigenplusX);
+        modItem.ChannelLookup ("Eigenplus.Y", &m_idx_eigenplusY);
+        chanMod.AddOutput (item, m_idx_eigenplusY);
+        modItem.ChannelLookup ("Eigenplus.Z", &m_idx_eigenplusZ);
+        chanMod.AddOutput (item, m_idx_eigenplusZ);
 
         // Lookup the index of the 'Eigenminus' channel and add it as an output.
-        modItem.ChannelLookup ("Eigenminus.X", &chanIdx);
-        chanMod.AddOutput (item, chanIdx);
-        modItem.ChannelLookup ("Eigenminus.Y", &chanIdx);
-        chanMod.AddOutput (item, chanIdx);
-        modItem.ChannelLookup ("Eigenminus.Z", &chanIdx);
-        chanMod.AddOutput (item, chanIdx);
+        modItem.ChannelLookup ("Eigenminus.X", &m_idx_eigenminusX);
+        chanMod.AddOutput (item, m_idx_eigenminusX);
+        modItem.ChannelLookup ("Eigenminus.Y", &m_idx_eigenminusY);
+        chanMod.AddOutput (item, m_idx_eigenminusY);
+        modItem.ChannelLookup ("Eigenminus.Z", &m_idx_eigenminusZ);
+        chanMod.AddOutput (item, m_idx_eigenminusZ);
 
         chanMod.AddTime ();
     
@@ -202,176 +201,57 @@ hotModoChanMod::cmod_Flags (
         unsigned int		 index)
 {
         CLxUser_Item		 modItem (item);
-        unsigned int		 chanIdx;
-        
+    
 //	log.Info ("cmod_Flags Method");
 
-        if (LXx_OK (modItem.ChannelLookup ("inputX", &chanIdx))) {
-                if (index == chanIdx)
-                        return LXfCHMOD_INPUT;
+        if  (
+             index == m_idx_x ||
+             index == m_idx_z ||
+             index == m_idx_gain ||
+             index == m_idx_outputType ||
+             index == m_idx_resolution ||
+             index == m_idx_globalScale ||
+             index == m_idx_size ||
+             index == m_idx_windSpeed ||
+             index == m_idx_windDir ||
+             index == m_idx_windAlign ||
+             index == m_idx_windSpeed ||
+             index == m_idx_chop ||
+             index == m_idx_waveHeight ||
+             index == m_idx_shortestWave ||
+             index == m_idx_oceanDepth ||
+             index == m_idx_seed ||
+             index == m_idx_damping
+            )
+        {
+                return LXfCHMOD_INPUT;
         }
-        if (LXx_OK (modItem.ChannelLookup ("inputZ", &chanIdx))) {
-                if (index == chanIdx)
-                        return LXfCHMOD_INPUT;
-        }
-        
-        if (LXx_OK (modItem.ChannelLookup ("gain", &chanIdx))) {
-                if (index == chanIdx)
-                        return LXfCHMOD_INPUT;
-        }
-        
-        if (LXx_OK (modItem.ChannelLookup ("outputType", &chanIdx))) {
-                if (index == chanIdx)
-                        return LXfCHMOD_INPUT;
-        }
-
-        if (LXx_OK (modItem.ChannelLookup ("resolution", &chanIdx))) {
-                if (index == chanIdx)
-                        return LXfCHMOD_INPUT;
-        }
-
-        if (LXx_OK (modItem.ChannelLookup ("globalScale", &chanIdx))) {
-                if (index == chanIdx)
-                        return LXfCHMOD_INPUT;
-        }
-
-        if (LXx_OK (modItem.ChannelLookup ("oceanSize", &chanIdx))) {
-                if (index == chanIdx)
-                        return LXfCHMOD_INPUT;
-        }
-
-        if (LXx_OK (modItem.ChannelLookup ("windSpeed", &chanIdx))) {
-                if (index == chanIdx)
-                        return LXfCHMOD_INPUT;
-        }
-
-        if (LXx_OK (modItem.ChannelLookup ("windDir", &chanIdx))) {
-                if (index == chanIdx)
-                        return LXfCHMOD_INPUT;
-        }
-
-        if (LXx_OK (modItem.ChannelLookup ("windAlign", &chanIdx))) {
-                if (index == chanIdx)
-                        return LXfCHMOD_INPUT;
-        }
-
-        if (LXx_OK (modItem.ChannelLookup ("chop", &chanIdx))) {
-                if (index == chanIdx)
-                        return LXfCHMOD_INPUT;
+        if (
+            index == m_idx_displacementX ||
+            index == m_idx_displacementY ||
+            index == m_idx_displacementZ ||
+            index == m_idx_foamX ||
+            index == m_idx_foamY ||
+            index == m_idx_foamZ ||
+            index == m_idx_sprayX ||
+            index == m_idx_sprayY ||
+            index == m_idx_sprayZ ||
+            index == m_idx_normalsX ||
+            index == m_idx_normalsY ||
+            index == m_idx_normalsZ ||
+            index == m_idx_jplus ||
+            index == m_idx_jminus ||
+            index == m_idx_eigenminusX ||
+            index == m_idx_eigenminusY ||
+            index == m_idx_eigenminusZ ||
+            index == m_idx_eigenplusX ||
+            index == m_idx_eigenplusY ||
+            index == m_idx_eigenplusZ
+           )
+        {
+            return LXfCHMOD_OUTPUT;
         }
 
-        if (LXx_OK (modItem.ChannelLookup ("waveHeight", &chanIdx))) {
-                if (index == chanIdx)
-                        return LXfCHMOD_INPUT;
-        }
-
-        if (LXx_OK (modItem.ChannelLookup ("shortestWave", &chanIdx))) {
-                if (index == chanIdx)
-                        return LXfCHMOD_INPUT;
-        }
-
-        if (LXx_OK (modItem.ChannelLookup ("oceanDepth", &chanIdx))) {
-                if (index == chanIdx)
-                        return LXfCHMOD_INPUT;
-        }
-
-        if (LXx_OK (modItem.ChannelLookup ("damping", &chanIdx))) {
-                if (index == chanIdx)
-                        return LXfCHMOD_INPUT;
-        }
-
-        if (LXx_OK (modItem.ChannelLookup ("seed", &chanIdx))) {
-                if (index == chanIdx)
-                        return LXfCHMOD_INPUT;
-        }
-
-        if (LXx_OK (modItem.ChannelLookup ("displacement.X", &chanIdx))) {
-                if (index == chanIdx)
-                        return LXfCHMOD_OUTPUT;
-        }
-        if (LXx_OK (modItem.ChannelLookup ("displacement.Y", &chanIdx))) {
-            if (index == chanIdx)
-                return LXfCHMOD_OUTPUT;
-        }
-        if (LXx_OK (modItem.ChannelLookup ("displacement.Z", &chanIdx))) {
-            if (index == chanIdx)
-                return LXfCHMOD_OUTPUT;
-        }
-
-        if (LXx_OK (modItem.ChannelLookup ("normal.X", &chanIdx))) {
-            if (index == chanIdx)
-                return LXfCHMOD_OUTPUT;
-        }
-        if (LXx_OK (modItem.ChannelLookup ("normal.Y", &chanIdx))) {
-            if (index == chanIdx)
-                return LXfCHMOD_OUTPUT;
-        }
-        if (LXx_OK (modItem.ChannelLookup ("normal.Z", &chanIdx))) {
-            if (index == chanIdx)
-                return LXfCHMOD_OUTPUT;
-        }
-
-        if (LXx_OK (modItem.ChannelLookup ("foam.X", &chanIdx))) {
-                if (index == chanIdx)
-                        return LXfCHMOD_OUTPUT;
-        }
-        if (LXx_OK (modItem.ChannelLookup ("foam.Y", &chanIdx))) {
-            if (index == chanIdx)
-                return LXfCHMOD_OUTPUT;
-        }
-        if (LXx_OK (modItem.ChannelLookup ("foam.Z", &chanIdx))) {
-            if (index == chanIdx)
-                return LXfCHMOD_OUTPUT;
-        }
-
-        if (LXx_OK (modItem.ChannelLookup ("spray.X", &chanIdx))) {
-                if (index == chanIdx)
-                        return LXfCHMOD_OUTPUT;
-        }
-        if (LXx_OK (modItem.ChannelLookup ("spray.Y", &chanIdx))) {
-            if (index == chanIdx)
-                return LXfCHMOD_OUTPUT;
-        }
-        if (LXx_OK (modItem.ChannelLookup ("spray.Z", &chanIdx))) {
-            if (index == chanIdx)
-                return LXfCHMOD_OUTPUT;
-        }
-
-        if (LXx_OK (modItem.ChannelLookup ("Jplus", &chanIdx))) {
-            if (index == chanIdx)
-                return LXfCHMOD_OUTPUT;
-        }
-
-        if (LXx_OK (modItem.ChannelLookup ("Jminus", &chanIdx))) {
-            if (index == chanIdx)
-                return LXfCHMOD_OUTPUT;
-        }
-
-        if (LXx_OK (modItem.ChannelLookup ("Eigenplus.X", &chanIdx))) {
-            if (index == chanIdx)
-                return LXfCHMOD_OUTPUT;
-        }
-        if (LXx_OK (modItem.ChannelLookup ("Eigenplus.Y", &chanIdx))) {
-            if (index == chanIdx)
-                return LXfCHMOD_OUTPUT;
-        }
-        if (LXx_OK (modItem.ChannelLookup ("Eigenplus.Z", &chanIdx))) {
-            if (index == chanIdx)
-                return LXfCHMOD_OUTPUT;
-        }
-
-        if (LXx_OK (modItem.ChannelLookup ("Eigenminus.X", &chanIdx))) {
-            if (index == chanIdx)
-                return LXfCHMOD_OUTPUT;
-        }
-        if (LXx_OK (modItem.ChannelLookup ("Eigenminus.Y", &chanIdx))) {
-            if (index == chanIdx)
-                return LXfCHMOD_OUTPUT;
-        }
-        if (LXx_OK (modItem.ChannelLookup ("Eigenminus.Z", &chanIdx))) {
-            if (index == chanIdx)
-                return LXfCHMOD_OUTPUT;
-        }
 
         return 0;
 }
@@ -385,47 +265,32 @@ hotModoChanMod::cmod_Evaluate (
     CLxLoc_ChannelModifier	 chanMod (cmod);
 
     CLxUser_Attributes	 at (attr);
-    OceanData		*od = new OceanData;
+    OceanData		*od = (OceanData *) data;
 
     // double			 inputX, inputZ, gain, windSpeed, windDir, windAlign, chop, waveHeight, shortestWave, damping, seed, globalScale, oceanDepth;
     // int              outputType, resolution, oceanSize;
 
 //	log.Info ("cmod_Evaluate Method");
-    
-    int index = 0;
-    od->m_x=at.Float(index);
-    index++;
-    od->m_z=at.Float(index);
-    index++;
-    od->m_gain=at.Float(index);
-    index++;
-    od->m_outputType=at.Int(index);
-    index++;
-    od->m_resolution=at.Int(index);
-    index++;
-    od->m_globalScale=at.Float(index);
-    index++;
-    od->m_size=at.Int(index);
-    index++;
-    od->m_windSpeed=at.Float(index);
-    index++;
-    od->m_windDir=at.Float(index);
-    index++;
-    od->m_windAlign=at.Float(index);
-    index++;
-    od->m_chop=at.Float(index);
-    index++;
-    od->m_waveHeight=at.Float(index);
-    index++;
-    od->m_shortestWave=1/at.Float(index); // we do this because modo's UI zeroes very small values, but is happy with very large values.
-    index++;
-    od->m_oceanDepth=at.Float(index);
-    index++;
-    od->m_damping=at.Float(index);
-    index++;
-    od->m_seed=at.Float(index);
-    index++;
-    od->m_time=at.Float(index);
+    od->m_x=at.Float(m_idx_x);
+    od->m_z=at.Float(m_idx_z);
+    od->m_gain=at.Float(m_idx_gain);
+    od->m_outputType=at.Int(m_idx_outputType);
+    od->m_resolution=at.Int(m_idx_resolution);
+	if(od->m_resolution > 12)
+        od->m_resolution = 12;
+	od->m_resolution = (int) pow(2.0,od->m_resolution);
+    od->m_globalScale=at.Float(m_idx_globalScale);
+    od->m_size=at.Int(m_idx_size);
+    od->m_windSpeed=at.Float(m_idx_windSpeed);
+    od->m_windDir=at.Float(m_idx_windDir);
+    od->m_windAlign=at.Float(m_idx_windAlign);
+    od->m_chop=at.Float(m_idx_chop);
+    od->m_waveHeight=at.Float(m_idx_waveHeight);
+    od->m_shortestWave=1/at.Float(m_idx_shortestWave); // we do this because modo's UI zeroes very small values, but is happy with very large values.
+    od->m_oceanDepth=at.Float(m_idx_oceanDepth);
+    od->m_damping=at.Float(m_idx_damping);
+    od->m_seed=at.Float(m_idx_damping);
+    od->m_time=at.Float(m_idx_time);
     
 	if( od->m_resolution != m_resolutionCache ||
        od->m_size != m_sizeCache ||
@@ -482,7 +347,7 @@ hotModoChanMod::cmod_Evaluate (
 
     float Jminus = 0.0;
     float Jplus = 0.0;
-    float result[3], displacement[3], normals[3], foam[3], spray[3], Eigenminus[3], Eigenplus[3], Jvalues[2];
+    float result[3], normals[3], foam[3], spray[3], Eigenminus[3], Eigenplus[3], Jvalues[2];
 
     // We'll need a seriously overloaded function here to cover all bases due to threading :/
     m_context->eval2_xz(od->m_x, od->m_z, result, normals, Jvalues, Eigenminus, Eigenplus);
@@ -542,47 +407,49 @@ hotModoChanMod::cmod_Evaluate (
             Eigenplus[i] = 0.0;
         }
     }
+    /*
+    at.SetFlt(m_idx_displacementX, result[0]); // vector
+    at.SetFlt(m_idx_displacementY, result[1]); // vector
+    at.SetFlt(m_idx_displacementZ, result[2]); // vector
+    at.SetFlt(m_idx_normalsX, normals[0]); // vector
+    at.SetFlt(m_idx_normalsY, normals[1]); // vector
+    at.SetFlt(m_idx_normalsZ, normals[2]); // vector
+    at.SetFlt(m_idx_foamX, foam[0]); // vector
+    at.SetFlt(m_idx_foamY, foam[1]); // vector
+    at.SetFlt(m_idx_foamZ, foam[2]); // vector
+    at.SetFlt(m_idx_sprayX, spray[0]); // vector
+    at.SetFlt(m_idx_sprayY, spray[1]); // vector
+    at.SetFlt(m_idx_sprayZ, spray[2]); // vector
+    at.SetFlt(m_idx_jminus, Jminus);
+    at.SetFlt(m_idx_jplus, Jplus);
+    at.SetFlt(m_idx_eigenminusX, Eigenminus[0]); // vector
+    at.SetFlt(m_idx_eigenminusY, Eigenminus[1]); // vector
+    at.SetFlt(m_idx_eigenminusZ, Eigenminus[2]); // vector
+    at.SetFlt(m_idx_eigenplusX, Eigenplus[0]); // vector
+    at.SetFlt(m_idx_eigenplusY, Eigenplus[1]); // vector
+    at.SetFlt(m_idx_eigenplusZ, Eigenplus[2]); // vector
+     */
 
-    int o_index = 0;
-    chanMod.WriteOutputFloat (attr, o_index, displacement[0]); // vector
-    o_index++;
-    chanMod.WriteOutputFloat (attr, o_index, displacement[1]); // vector
-    o_index++;
-    chanMod.WriteOutputFloat (attr, o_index, displacement[2]); // vector
-    o_index++;
-    chanMod.WriteOutputFloat (attr, o_index, normals[0]); // vector
-    o_index++;
-    chanMod.WriteOutputFloat (attr, o_index, normals[1]); // vector
-    o_index++;
-    chanMod.WriteOutputFloat (attr, o_index, normals[2]); // vector
-    o_index++;
-    chanMod.WriteOutputFloat (attr, o_index, foam[0]); // vector
-    o_index++;
-    chanMod.WriteOutputFloat (attr, o_index, foam[1]); // vector
-    o_index++;
-    chanMod.WriteOutputFloat (attr, o_index, foam[2]); // vector
-    o_index++;
-    chanMod.WriteOutputFloat (attr, o_index, spray[0]); // vector
-    o_index++;
-    chanMod.WriteOutputFloat (attr, o_index, spray[1]); // vector
-    o_index++;
-    chanMod.WriteOutputFloat (attr, o_index, spray[2]); // vector
-    o_index++;
-    chanMod.WriteOutputFloat (attr, o_index, Jminus);
-    o_index++;
-    chanMod.WriteOutputFloat (attr, o_index, Jplus);
-    o_index++;
-    chanMod.WriteOutputFloat (attr, o_index, Eigenminus[0]); // vector
-    o_index++;
-    chanMod.WriteOutputFloat (attr, o_index, Eigenminus[1]); // vector
-    o_index++;
-    chanMod.WriteOutputFloat (attr, o_index, Eigenminus[2]); // vector
-    o_index++;
-    chanMod.WriteOutputFloat (attr, o_index, Eigenplus[0]); // vector
-    o_index++;
-    chanMod.WriteOutputFloat (attr, o_index, Eigenplus[1]); // vector
-    o_index++;
-    chanMod.WriteOutputFloat (attr, o_index, Eigenplus[2]); // vector
+    chanMod.WriteOutputFloat (attr, m_idx_displacementX, result[0]); // vector
+    chanMod.WriteOutputFloat (attr, m_idx_displacementY, result[1]); // vector
+    chanMod.WriteOutputFloat (attr, m_idx_displacementZ, result[2]); // vector
+    chanMod.WriteOutputFloat (attr, m_idx_normalsX, normals[0]); // vector
+    chanMod.WriteOutputFloat (attr, m_idx_normalsY, normals[1]); // vector
+    chanMod.WriteOutputFloat (attr, m_idx_normalsZ, normals[2]); // vector
+    chanMod.WriteOutputFloat (attr, m_idx_foamX, foam[0]); // vector
+    chanMod.WriteOutputFloat (attr, m_idx_foamY, foam[1]); // vector
+    chanMod.WriteOutputFloat (attr, m_idx_foamZ, foam[2]); // vector
+    chanMod.WriteOutputFloat (attr, m_idx_sprayX, spray[0]); // vector
+    chanMod.WriteOutputFloat (attr, m_idx_sprayY, spray[1]); // vector
+    chanMod.WriteOutputFloat (attr, m_idx_sprayZ, spray[2]); // vector
+    chanMod.WriteOutputFloat (attr, m_idx_jminus, Jminus);
+    chanMod.WriteOutputFloat (attr, m_idx_jplus, Jplus);
+    chanMod.WriteOutputFloat (attr, m_idx_eigenminusX, Eigenminus[0]); // vector
+    chanMod.WriteOutputFloat (attr, m_idx_eigenminusY, Eigenminus[1]); // vector
+    chanMod.WriteOutputFloat (attr, m_idx_eigenminusZ, Eigenminus[2]); // vector
+    chanMod.WriteOutputFloat (attr, m_idx_eigenplusX, Eigenplus[0]); // vector
+    chanMod.WriteOutputFloat (attr, m_idx_eigenplusY, Eigenplus[1]); // vector
+    chanMod.WriteOutputFloat (attr, m_idx_eigenplusZ, Eigenplus[2]); // vector
 
     return LXe_OK;
 }
