@@ -60,6 +60,9 @@ LxResult CPackage::pkg_SetupChannels(ILxUnknownID addChan)
 	ac.NewChannel  ("gain",			LXsTYPE_PERCENT);
 	ac.SetDefault  (1.0, 0);
 
+    ac.NewChannel  ("outputType",	LXsTYPE_INTEGER);
+	ac.SetDefault  (0.0, 0);
+
 	ac.NewChannel  ("resolution",	LXsTYPE_INTEGER);
 	ac.SetDefault  (0.0, 6);
 
@@ -129,8 +132,8 @@ void CChanState::Attach (CLxUser_Evaluation	&eval, ILxUnknownID item)
     eval.AddChan (item, "enable");
     eval.AddChan (item, Cs_MORPH_MAPNAME);
     eval.AddChan (item, "gain");
+    eval.AddChan (item, "outputType");
     eval.AddChan (item, "resolution");
-
 	eval.AddChan (item, "oceanSize");
 	eval.AddChan (item, "windSpeed");
 	eval.AddChan (item, "windDir");
@@ -156,6 +159,7 @@ void CChanState::Read (CLxUser_Attributes &attr, unsigned index)
 	{
         attr.String (index++, name);
         gain = attr.Float (index++);
+        outputType = attr.Int (index++);
 		
 		resolution  = attr.Int  (index++);
 		if(resolution > 12)
@@ -196,7 +200,12 @@ void CChanState::updateOcean()
         float scale,
         float chop_amount)
         */
-		m_ocean->update(time, *m_context, true,true,false,true, ocean_scale*waveHeight,chop);
+        if (outputType == 0)
+        {
+            m_ocean->update(time, *m_context, true,true,false,false, ocean_scale*waveHeight,chop);
+        } else {
+            m_ocean->update(time, *m_context, true,true,false,true, ocean_scale*waveHeight,chop);
+        }
 	}
 }
 
@@ -220,47 +229,174 @@ bool CInfluence::SelectMap (CLxUser_Mesh &mesh, CLxUser_MeshMap &map)
 	//do weight for jacobian
 	LxResult r = map.SelectByName(LXi_VMAP_WEIGHT, "hotModo_Jacobian_Pos");
 	
-	if(r != LXe_OK ) map.New(LXi_VMAP_WEIGHT, "hotModo_Jacobian_Pos", &jacobianPos_id);
-	else jacobianPos_id = map.ID ();
-
+	if(r != LXe_OK )
+    {
+        map.New(LXi_VMAP_WEIGHT, "hotModo_Jacobian_Pos", &jacobianPos_id);
+    } else {
+        jacobianPos_id = map.ID ();
+    }
 
 	r = map.SelectByName(LXi_VMAP_WEIGHT, "hotModo_Jacobian_Min");
 	
-	if(r != LXe_OK )  map.New(LXi_VMAP_WEIGHT, "hotModo_Jacobian_Min", &jacobianMin_id);
-	else jacobianMin_id = map.ID ();
+	if(r != LXe_OK )
+    {
+        map.New(LXi_VMAP_WEIGHT, "hotModo_Jacobian_Min", &jacobianMin_id);
+    } else {
+        jacobianMin_id = map.ID ();
+    }
+
+    r = map.SelectByName(LXi_VMAP_WEIGHT, "hotModo_Jacobian_EigenPlus_X");
+	
+	if(r != LXe_OK )
+    {
+        map.New(LXi_VMAP_WEIGHT, "hotModo_Jacobian_EigenPlus_X", &jacobianEigenpX_id);
+    } else {
+        jacobianEigenpX_id = map.ID ();
+    }
+
+    r = map.SelectByName(LXi_VMAP_WEIGHT, "hotModo_Jacobian_EigenPlus_Y");
+	
+	if(r != LXe_OK )
+    {
+        map.New(LXi_VMAP_WEIGHT, "hotModo_Jacobian_EigenPlus_Y", &jacobianEigenpY_id);
+    } else {
+        jacobianEigenpY_id = map.ID ();
+    }
+
+    r = map.SelectByName(LXi_VMAP_WEIGHT, "hotModo_Jacobian_EigenPlus_Z");
+	
+	if(r != LXe_OK )
+    {
+        map.New(LXi_VMAP_WEIGHT, "hotModo_Jacobian_EigenPlus_Z", &jacobianEigenpZ_id);
+    } else {
+        jacobianEigenpZ_id = map.ID ();
+    }
+
+    r = map.SelectByName(LXi_VMAP_WEIGHT, "hotModo_Jacobian_EigenMinus_X");
+	
+	if(r != LXe_OK )
+    {
+        map.New(LXi_VMAP_WEIGHT, "hotModo_Jacobian_EigenMinus_X", &jacobianEigenmX_id);
+    } else {
+        jacobianEigenmX_id = map.ID ();
+    }
+    
+    r = map.SelectByName(LXi_VMAP_WEIGHT, "hotModo_Jacobian_EigenMinus_Y");
+	
+	if(r != LXe_OK )  map.New(LXi_VMAP_WEIGHT, "hotModo_Jacobian_EigenMinus_Y", &jacobianEigenmY_id);
+	else jacobianEigenmY_id = map.ID ();
+    
+    r = map.SelectByName(LXi_VMAP_WEIGHT, "hotModo_Jacobian_EigenMinus_Z");
+	
+	if(r != LXe_OK )  map.New(LXi_VMAP_WEIGHT, "hotModo_Jacobian_EigenMinus_Z", &jacobianEigenmZ_id);
+	else jacobianEigenmZ_id = map.ID ();
+
+    r = map.SelectByName(LXi_VMAP_WEIGHT, "hotModo_Jacobian_Foam_X");
+	
+	if(r != LXe_OK )  map.New(LXi_VMAP_WEIGHT, "hotModo_Jacobian_Foam_X", &jacobianFoamX_id);
+	else jacobianFoamX_id = map.ID ();
+
+    r = map.SelectByName(LXi_VMAP_WEIGHT, "hotModo_Jacobian_Foam_Y");
+	
+	if(r != LXe_OK )  map.New(LXi_VMAP_WEIGHT, "hotModo_Jacobian_Foam_Y", &jacobianFoamY_id);
+	else jacobianFoamY_id = map.ID ();
+
+    r = map.SelectByName(LXi_VMAP_WEIGHT, "hotModo_Jacobian_Foam_Z");
+	
+	if(r != LXe_OK )  map.New(LXi_VMAP_WEIGHT, "hotModo_Jacobian_Foam_Z", &jacobianFoamZ_id);
+	else jacobianFoamZ_id = map.ID ();
+
+    r = map.SelectByName(LXi_VMAP_WEIGHT, "hotModo_Jacobian_Spray_X");
+	
+	if(r != LXe_OK )  map.New(LXi_VMAP_WEIGHT, "hotModo_Jacobian_Spray_X", &jacobianSprayX_id);
+	else jacobianSprayX_id = map.ID ();
+    
+    r = map.SelectByName(LXi_VMAP_WEIGHT, "hotModo_Jacobian_Spray_Y");
+	
+	if(r != LXe_OK )  map.New(LXi_VMAP_WEIGHT, "hotModo_Jacobian_Spray_Y", &jacobianSprayY_id);
+	else jacobianSprayY_id = map.ID ();
+    
+    r = map.SelectByName(LXi_VMAP_WEIGHT, "hotModo_Jacobian_Spray_Z");
+	
+	if(r != LXe_OK )  map.New(LXi_VMAP_WEIGHT, "hotModo_Jacobian_Spray_Z", &jacobianSprayZ_id);
+	else jacobianSprayZ_id = map.ID ();
 
     return false;
 }
 
 void CInfluence::Offset (CLxUser_Point &point, float weight, LXtFVector	offset)
 {
-    LXtFVector		 offF, posF; //, uv;
+    LXtFVector		 offF, posF, uv;
 	if(!cur.enabled)
         return;
 
 	point.Pos (posF);
 
 	//get uvs
-	/* if(gotUvs)
+	if(gotUvs)
     {
         point.MapValue (map_id, uv);
-    }*/
+    }
 		
 	if(cur.m_context) 
 	{
-        float result[3];
+        float jM = 0.0;
+        float jP = 0.0;
+        float eigenMx = 0.0;
+        float eigenMy = 0.0;
+        float eigenMz = 0.0;
+        float eigenPx = 0.0;
+        float eigenPy = 0.0;
+        float eigenPz = 0.0;
+        float sprayx = 0.0;
+        float sprayy = 0.0;
+        float sprayz = 0.0;
+        float foamx = 0.0;
+        float foamy = 0.0;
+        float foamz = 0.0;
+        float result[3], normals[3], foam[3], spray[3], Eigenminus[3], Eigenplus[3], Jvalues[2];
 		float p[2];
 		p[0] = (float)posF[0]; // (cur.globalScale)*uv[0]*cur.scaleU;
 		p[1] = (float)posF[2]; // (cur.globalScale)*uv[1]*cur.scaleV;
 		// Overloaded to get disp back from the HOT library in result[].
-		cur.m_context->eval2_xz(p[0],p[1], result);
+		// cur.m_context->eval2_xz(p[0],p[1], result);
+        cur.m_context->eval2_xz(p[0], p[1], result, normals, Jvalues, Eigenminus, Eigenplus);
         
-		float jM = 0;
-		float jP = 0;
-		point.ClearMapValue(jacobianMin_id);
+        if(cur.outputType == 1)
+        {
+            jM = Jvalues[0];
+            jP = Jvalues[1];
+            eigenMx = Eigenminus[0];
+            eigenMy = Eigenminus[1];
+            eigenMz = Eigenminus[2];
+            eigenPx = Eigenplus[0];
+            eigenPy = Eigenplus[1];
+            eigenPz = Eigenplus[2];
+            foamx = foam[0];
+            foamy = foam[1];
+            foamz = foam[2];
+            sprayx = spray[0];
+            sprayy = spray[1];
+            sprayz = spray[2];
+        }
 		point.SetMapValue(jacobianMin_id, &jM);
-		point.ClearMapValue(jacobianPos_id);
 		point.SetMapValue(jacobianPos_id, &jP);
+        
+		point.SetMapValue(jacobianEigenmX_id, &eigenMx);
+		point.SetMapValue(jacobianEigenmY_id, &eigenMy);
+		point.SetMapValue(jacobianEigenmZ_id, &eigenMz);
+        
+		point.SetMapValue(jacobianEigenpX_id, &eigenPx);
+		point.SetMapValue(jacobianEigenpY_id, &eigenPy);
+		point.SetMapValue(jacobianEigenpZ_id, &eigenPz);
+        
+		point.SetMapValue(jacobianFoamX_id, &foamx);
+		point.SetMapValue(jacobianFoamY_id, &foamy);
+		point.SetMapValue(jacobianFoamZ_id, &foamz);
+        
+		point.SetMapValue(jacobianSprayX_id, &sprayx);
+		point.SetMapValue(jacobianSprayY_id, &sprayy);
+		point.SetMapValue(jacobianSprayZ_id, &sprayz);
 
         // Implies choppiness is active, using the disp property.
         if (cur.chop > 0)
@@ -306,6 +442,7 @@ LxResult CModifierElement::EvalCache (CLxUser_Evaluation &eval, CLxUser_Attribut
         return LXe_OK;
 
 	if(infl->cur.resolution != resolution || 
+        infl->cur.outputType != outputType ||
 		infl->cur.size != size ||
 		infl->cur.windSpeed != windSpeed ||
 		infl->cur.windDir != windDir ||
@@ -327,7 +464,13 @@ LxResult CModifierElement::EvalCache (CLxUser_Evaluation &eval, CLxUser_Attribut
 			delete context;
 		}
 		ocean = infl->cur.reBuildOceanData();
-		context = ocean->new_context(true,true,false,false);
+        outputType = infl->cur.outputType;
+        if (outputType == 0)
+        {
+            context = ocean->new_context(true,true,false,false);
+        } else {
+            context = ocean->new_context(true,true,false,true);
+        }
 		resolution = infl->cur.resolution;
 		size = infl->cur.size;
 		windSpeed = infl->cur.windSpeed;

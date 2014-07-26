@@ -185,7 +185,7 @@ class CMorphPopup : public CLxDynamicUIValue
 
         unsigned	PopCount ()LXx_OVERRIDE
         {
-			return morfNames.size ();
+			return (unsigned)morfNames.size ();
         }
 
         const char*	PopUserName (unsigned index)LXx_OVERRIDE

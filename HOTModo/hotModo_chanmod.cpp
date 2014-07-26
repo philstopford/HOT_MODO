@@ -172,7 +172,10 @@ hotModoChanMod::cmod_Allocate (
         chanMod.AddInput (item, m_idx_seed);
         cm_idx_seed = index;
         index++;
-        
+
+        chanMod.AddTime ();
+        cm_idx_time = index;
+
         index = 0; // reset counter for output channel tracking.
         // Lookup the index of the 'displacement' channel and add it as an output.
         modItem.ChannelLookup ("displacement.X", &m_idx_displacementX);
@@ -269,9 +272,6 @@ hotModoChanMod::cmod_Allocate (
         chanMod.AddOutput (item, m_idx_eigenminusZ);
         cm_idx_eigenminusZ = index;
         index++;
-
-        chanMod.AddTime ();
-        cm_idx_time = index;
     
         return LXe_OK;
 }
@@ -386,7 +386,7 @@ hotModoChanMod::cmod_Flags (
             if (index == chanIdx)
                 return LXfCHMOD_OUTPUT;
         }
-
+    
         if (LXx_OK (modItem.ChannelLookup ("normal.X", &chanIdx))) {
             if (index == chanIdx)
                 return LXfCHMOD_OUTPUT;
@@ -471,7 +471,7 @@ hotModoChanMod::cmod_Evaluate (
         ILxUnknownID		 attr,		// ILxAttributesID
         void			*data)		
 {
-    myMutex.lock(); // temporary. Something is blowing up and I don't know what.
+    // myMutex.lock(); // temporary. Something is blowing up and I don't know what.
     CLxLoc_ChannelModifier	 chanMod (cmod);
 
     CLxUser_Attributes	 at (attr);
@@ -531,8 +531,7 @@ hotModoChanMod::cmod_Evaluate (
        od->m_shortestWave != m_shortestWaveCache ||
        od->m_oceanDepth != m_oceanDepthCache ||
        od->m_damping != m_dampingCache ||
-       od->m_seed != m_seedCache ||
-       od->m_time != m_timeCache )
+       od->m_seed != m_seedCache )
     {
         if(m_ocean != NULL)
         {
@@ -550,7 +549,6 @@ hotModoChanMod::cmod_Evaluate (
 		m_oceanDepthCache = od->m_oceanDepth;
 		m_dampingCache = od->m_damping;
         m_seedCache = od->m_seed;
-        m_timeCache = od->m_time;
     }
     
     if(m_ocean == NULL)
@@ -585,6 +583,8 @@ hotModoChanMod::cmod_Evaluate (
     
     // Now we sort out foam and spray based on operating mode. Need Jacobian otherwise we'll send out zeros.
     // Lifted and adapted from the LW plugin port.
+    float result_length = sqrt((result[0]*result[0])+(result[1]*result[1])+(result[2]*result[2]));
+
     if (od->m_outputType == 1)
     {
         // Sort out our J floats
@@ -639,9 +639,9 @@ hotModoChanMod::cmod_Evaluate (
         }
     }
 
-    chanMod.WriteOutputFloat (attr, cm_idx_displacementX, result[0]); // vector
-    chanMod.WriteOutputFloat (attr, cm_idx_displacementY, result[1]); // vector
-    chanMod.WriteOutputFloat (attr, cm_idx_displacementZ, result[2]); // vector
+    chanMod.WriteOutputFloat (attr, cm_idx_displacementX, ((result[0]/result_length)+1)/2); // vector, normalize to 0-1, 0.5 is no displacement
+    chanMod.WriteOutputFloat (attr, cm_idx_displacementY, ((result[1]/result_length)+1)/2); // vector, normalize to 0-1, 0.5 is no displacement
+    chanMod.WriteOutputFloat (attr, cm_idx_displacementZ, ((result[2]/result_length)+1)/2); // vector, normalize to 0-1, 0.5 is no displacement
     chanMod.WriteOutputFloat (attr, cm_idx_normalsX, normals[0]); // vector
     chanMod.WriteOutputFloat (attr, cm_idx_normalsY, normals[1]); // vector
     chanMod.WriteOutputFloat (attr, cm_idx_normalsZ, normals[2]); // vector
@@ -659,7 +659,7 @@ hotModoChanMod::cmod_Evaluate (
     chanMod.WriteOutputFloat (attr, cm_idx_eigenplusX, Eigenplus[0]); // vector
     chanMod.WriteOutputFloat (attr, cm_idx_eigenplusY, Eigenplus[1]); // vector
     chanMod.WriteOutputFloat (attr, cm_idx_eigenplusZ, Eigenplus[2]); // vector
-    myMutex.unlock();
+    // myMutex.unlock();
 
     return LXe_OK;
 }
@@ -679,12 +679,6 @@ hotModoChanModPackage::hotModoChanModPackage ()
         chanmod_factory.AddInterface (new CLxIfc_PackageInstance<hotModoChanMod>);
         chanmod_factory.AddInterface (new CLxIfc_ChannelModItem<hotModoChanMod>);
 }
-
-static LXtTextValueHint hint_Blend[] = {
-        0,			"%min",		// float min 0.0
-        10000,			"%max",		// float max 1.0
-        -1,			NULL
-        };
 
         LxResult
 hotModoChanModPackage::pkg_SetupChannels (

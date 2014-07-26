@@ -176,8 +176,7 @@ LxResult hotModoTexture::vtx_ReadChannels(ILxUnknownID attr, void  **ppvData)
 		rd->m_shortestWave != m_shortestWaveCache ||
         rd->m_oceanDepth != m_oceanDepthCache ||
         rd->m_damping != m_dampingCache ||
-        rd->m_seed != m_seedCache ||
-        rd->m_time != m_timeCache )
+        rd->m_seed != m_seedCache )
 	{
 		if(m_ocean != NULL) 
 		{
@@ -196,7 +195,6 @@ LxResult hotModoTexture::vtx_ReadChannels(ILxUnknownID attr, void  **ppvData)
 		m_oceanDepthCache = rd->m_oceanDepth;
 		m_dampingCache = rd->m_damping;
         m_seedCache = rd->m_seed;
-        m_timeCache = rd->m_time;
 	}
 	
 	if(m_ocean == NULL)
@@ -255,7 +253,6 @@ void hotModoTexture::vtx_Evaluate (ILxUnknownID vector, LXpTextureOutput *tOut, 
     RendData		*rd = (RendData *) data;
     LXpTextureInput		*tInp;
 	LXpDisplace *tInpDsp;
-    // float			 tPos[2];
 
     tInp = (LXpTextureInput *) pkt_service.FastPacket (vector, tin_offset);
 	tInpDsp = (LXpDisplace *) pkt_service.FastPacket (vector, tinDsp_offset);
@@ -268,41 +265,39 @@ void hotModoTexture::vtx_Evaluate (ILxUnknownID vector, LXpTextureOutput *tOut, 
 
 		tOut->direct   = 1;
 
-		int cc = tInp->context;
-		if(cc == 1)
-		{
-            // This should really go to the material displacement height, but there's no obvious way to do this from a texture.
-            // modo expects textures only to send 0-1 ranged values. :(
-			float scale = m_ocean_scale*rd->m_waveHeight;
-
-			if(rd->m_outputType == 0)
-			{
-                float result_length = sqrt((result[0]*result[0])+(result[1]*result[1])+(result[2]*result[2]));
-                // Vector displacement usage; set color vector, per Greg D.
-				/*tInpDsp->dPos[0] = result[0]/result_length;
-				tInpDsp->dPos[1] = result[1]/result_length;
-				tInpDsp->dPos[2] = result[2]/result_length;*/
-                tOut->color[0][0] = result[0]/result_length;
-                tOut->color[0][1] = result[1]/result_length;
-                tOut->color[0][2] = result[2]/result_length;
-
-                // Set by material - except we don't seem to have a way to do this from a texture context.
-				// tInpDsp->amplitude = scale * result_length * rd->m_gain;
-                // Not sure if this enable setting is needed for a color output intended for vector displacement.
-				// tInpDsp->enable = true;
-			}
-			else if(rd->m_outputType == 1)	
-			{	
-				tOut->color[0][0] = m_context->Jplus;
-				tOut->color[0][1] = m_context->Jminus;
-				tOut->color[0][2] = 0.0;
-			}
-		}
-		else
-		{
-			tOut->value[0] = result[1]*rd->m_gain;
-			tOut->alpha[0] = 1.0;
-		}
+        // This should really go to the material displacement height, but there's no obvious way to do this from a texture.
+        // modo expects textures only to send 0-1 ranged values. :(
+        // float scale = m_ocean_scale*rd->m_waveHeight;
+        
+        // Note that modo expects textures to output the right kind of data based on the context. This is the reason for checking against
+        // LXi_TFX_COLOR in the context below. If we aren't driving a color, we output a value instead.
+        // The intent of tInpDsp->enable isn't entirely clear. The docs, such as they are, indicate that the texture should set this when outputting displacement. It's disabled for the moment.
+        if(rd->m_outputType == 0)
+        {
+            float result_length = sqrt((result[0]*result[0])+(result[1]*result[1])+(result[2]*result[2]));
+            if (LXi_TFX_COLOR == tInp->context)
+            {
+                // tInpDsp->enable = false;
+                LXx_VSET3 (tOut->color[0], result[0]/result_length, result[1]/result_length, result[2]/result_length);
+            }
+            else
+            {
+                // tInpDsp->enable = true;
+                tOut->value[0] = result[1]/result_length;
+            }
+            // Set by material - except we don't seem to have a way to do this from a texture context.
+            // tInpDsp->amplitude = scale * result_length * rd->m_gain;
+        }
+        else if(rd->m_outputType == 1)	
+        {	
+            if (LXi_TFX_COLOR == tInp->context)
+            {
+                LXx_VSET3 (tOut->color[0], m_context->Jplus, m_context->Jminus, 0.0);
+            } else {
+                // tInpDsp->enable = true;
+                tOut->value[0] = m_context->Jminus;
+            }
+        }
 	}
 }
 

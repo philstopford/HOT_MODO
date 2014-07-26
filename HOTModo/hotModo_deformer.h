@@ -23,7 +23,8 @@ std::mutex myMutex; // global variable
 #define SRVNAME_MODIFIER		"hotModoDeform"
 #define SPWNAME_INSTANCE		"hotModo.inst"
 #define Cs_MORPH_MAPNAME		LXsICHAN_MORPHDEFORM_MAPNAME
-
+#define Cs_WEIGHT_MAPNAME       LXsICHAN_WEIGHTCONTAINER_WEIGHTMAP
+    
 class CPackage;
 
 class CInstance : public CLxImpl_PackageInstance
@@ -74,7 +75,7 @@ class CChanState : public CLxObject
 		LXtMatrix		 xfrm;
 		bool			 enabled;
 		int				 resolution;
-
+        int outputType;
 		float globalScale;
 		float scaleU;
 		float scaleV;
@@ -118,7 +119,7 @@ class CInfluence : public CLxMeshInfluence
     public:
 		CLxUser_SelectionService   selSrv;
 		CChanState			cur;
-		LXtMeshMapID		map_id, jacobianPos_id, jacobianMin_id;
+		LXtMeshMapID		map_id, jacobianPos_id, jacobianMin_id, jacobianFoamX_id, jacobianFoamY_id, jacobianFoamZ_id, jacobianSprayX_id, jacobianSprayY_id, jacobianSprayZ_id, jacobianEigenpX_id, jacobianEigenpY_id, jacobianEigenpZ_id, jacobianEigenmX_id, jacobianEigenmY_id, jacobianEigenmZ_id;
 		bool				gotUvs;
 
 		bool SelectMap (CLxUser_Mesh &mesh, CLxUser_MeshMap &map) LXx_OVERRIDE;
@@ -132,6 +133,7 @@ class CModifierElement : public CLxItemModifierElement
 		drw::Ocean        *ocean;
 		drw::OceanContext *context;
 		float ocean_scale;
+        int outputType;
 		int resolution;
 		float size;
 		float windSpeed;
@@ -143,11 +145,12 @@ class CModifierElement : public CLxItemModifierElement
 		float oceanDepth;
 		float damping;
 		float seed;
-    
+
 		CModifierElement()
 		{
 			ocean = NULL;
 			context = NULL;
+            outputType = 0;
 			ocean_scale = 1.0f;
 			resolution = 6.0f;
 			size = 200.0f;
