@@ -160,16 +160,36 @@ void CChanState::Read (CLxUser_Attributes &attr, unsigned index)
         attr.String (index++, name);
         gain = attr.Float (index++);
         outputType = attr.Int (index++);
+        if(outputType < 0)
+        {
+            outputType = 0;
+        }
+        if(outputType > 1)
+        {
+            outputType = 1;
+        }
 		
 		resolution  = attr.Int  (index++);
 		if(resolution > 12)
         {
             resolution = 12;
         }
+        if(resolution < 1)
+        {
+            resolution = 1;
+        }
 		resolution = (int) pow(2.0,resolution);
 		
         size = attr.Float (index++);
+        if(size <= 0)
+        {
+            size = 0.01;
+        }
 		windSpeed = attr.Float (index++);
+        if(windSpeed <= 0)
+        {
+            windSpeed = 0.01;
+        }
 		windDir = attr.Float (index++);
 		windAlign = attr.Float (index++);
 		chop = attr.Float (index++);
@@ -452,6 +472,7 @@ LxResult CModifierElement::EvalCache (CLxUser_Evaluation &eval, CLxUser_Attribut
 		infl->cur.oceanDepth != oceanDepth ||
 		infl->cur.damping != damping ||
 		infl->cur.seed != seed ||
+        infl->cur.waveHeight != waveHeight ||
 		ocean == NULL )
 	{
 		if (ocean)
@@ -481,6 +502,7 @@ LxResult CModifierElement::EvalCache (CLxUser_Evaluation &eval, CLxUser_Attribut
 		oceanDepth = infl->cur.oceanDepth;
 		damping = infl->cur.damping;
 		seed = infl->cur.seed;
+        waveHeight = infl->cur.waveHeight;
 		infl->cur.setUpOceanPtrs(ocean, context);
 	}
 	else infl->cur.setUpOceanPtrs(ocean, context);

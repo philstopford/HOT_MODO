@@ -50,21 +50,6 @@ LxResult hotModoTexture::vtx_SetupChannels (ILxUnknownID addChan)
 	ac.NewChannel  ("resolution",	LXsTYPE_INTEGER);
 	ac.SetDefault  (0.0, 6);
 
-	ac.NewChannel  ("globalScale",	LXsTYPE_FLOAT);
-	ac.SetDefault  (1.0f, 0);
-
-	ac.NewChannel  ("scaleU",	LXsTYPE_FLOAT);
-	ac.SetDefault  (1.0f, 0);
-
-	ac.NewChannel  ("scaleV",	LXsTYPE_FLOAT);
-	ac.SetDefault  (1.0f, 0);
-
-	ac.NewChannel  ("offsetU",	LXsTYPE_FLOAT);
-	ac.SetDefault  (0.0f, 0);
-
-	ac.NewChannel  ("offsetV",	LXsTYPE_FLOAT);
-	ac.SetDefault  (0.0f, 0);
-
 	ac.NewChannel  ("oceanSize",	LXsTYPE_FLOAT);
 	ac.SetDefault  (200.0f, 0);
 
@@ -109,11 +94,6 @@ LxResult hotModoTexture::vtx_LinkChannels (ILxUnknownID eval, ILxUnknownID	item)
 	m_idx_gain = ev.AddChan (item, "gain");
 	m_idx_outputType = ev.AddChan (item, "outputType");
 	m_idx_resolution = ev.AddChan (item, "resolution");
-	m_idx_globalScale = ev.AddChan (item, "globalScale");
-	m_idx_scaleU = ev.AddChan (item, "scaleU");
-	m_idx_scaleV = ev.AddChan (item, "scaleV");
-	m_idx_offsetU = ev.AddChan (item, "offsetU");
-	m_idx_offsetV = ev.AddChan (item, "offsetV");
 	m_idx_size = ev.AddChan (item, "oceanSize");
 	m_idx_windSpeed = ev.AddChan (item, "windSpeed");
 	m_idx_windDir = ev.AddChan (item, "windDir");
@@ -145,18 +125,36 @@ LxResult hotModoTexture::vtx_ReadChannels(ILxUnknownID attr, void  **ppvData)
 
 	rd->m_gain = at.Float(m_idx_gain);
 	rd->m_outputType = at.Int(m_idx_outputType);
+	if(rd->m_outputType < 0)
+    {
+        rd->m_outputType = 0;
+    }
+	if(rd->m_outputType > 1)
+    {
+        rd->m_outputType = 1;
+    }
 
 	rd->m_resolution = at.Int(m_idx_resolution);
-	if(rd->m_resolution > 12) rd->m_resolution = 12;
+	if(rd->m_resolution > 12)
+    {
+        rd->m_resolution = 12;
+    }
+	if(rd->m_resolution < 1)
+    {
+        rd->m_resolution = 1;
+    }
 	rd->m_resolution = (int) pow(2.0,rd->m_resolution);
 
-	rd->m_globalScale = at.Float(m_idx_globalScale);
-	rd->m_scaleU = at.Float(m_idx_scaleU);
-	rd->m_scaleV = at.Float(m_idx_scaleV);
-	rd->m_offsetU = at.Float(m_idx_offsetU);
-	rd->m_offsetV = at.Float(m_idx_offsetV);
 	rd->m_size = at.Float(m_idx_size);
+    if(rd->m_size <= 0)
+    {
+        rd->m_size = 0.01;
+    }
 	rd->m_windSpeed = at.Float(m_idx_windSpeed);
+    if(rd->m_windSpeed <= 0)
+    {
+        rd->m_windSpeed = 0.01;
+    }
 	rd->m_windDir = at.Float(m_idx_windDir);
 	rd->m_windAlign = at.Float(m_idx_windAlign);
 	rd->m_chop = at.Float(m_idx_chop);
@@ -176,7 +174,7 @@ LxResult hotModoTexture::vtx_ReadChannels(ILxUnknownID attr, void  **ppvData)
 		rd->m_shortestWave != m_shortestWaveCache ||
         rd->m_oceanDepth != m_oceanDepthCache ||
         rd->m_damping != m_dampingCache ||
-        rd->m_seed != m_seedCache )
+        rd->m_seed != m_seedCache)
 	{
 		if(m_ocean != NULL) 
 		{
@@ -257,46 +255,44 @@ void hotModoTexture::vtx_Evaluate (ILxUnknownID vector, LXpTextureOutput *tOut, 
     tInp = (LXpTextureInput *) pkt_service.FastPacket (vector, tin_offset);
 	tInpDsp = (LXpDisplace *) pkt_service.FastPacket (vector, tinDsp_offset);
 
-	float result[3];
-
-	if(m_ocean != NULL && m_context != NULL) 
+    float result[3], normals[3], Eigenminus[3], Eigenplus[3], Jvalues[2];
+    
+    // We'll need a seriously overloaded function here to cover all bases due to threading :/
+	if(m_ocean != NULL && m_context != NULL)
 	{
-		m_context->eval2_xz(tInp->uvw[0], tInp->uvw[1], result);
+        m_context->eval2_xz(tInp->uvw[0], tInp->uvw[2], result, normals, Jvalues, Eigenminus, Eigenplus);
 
 		tOut->direct   = 1;
-
-        // This should really go to the material displacement height, but there's no obvious way to do this from a texture.
-        // modo expects textures only to send 0-1 ranged values. :(
-        // float scale = m_ocean_scale*rd->m_waveHeight;
-        
-        // Note that modo expects textures to output the right kind of data based on the context. This is the reason for checking against
-        // LXi_TFX_COLOR in the context below. If we aren't driving a color, we output a value instead.
-        // The intent of tInpDsp->enable isn't entirely clear. The docs, such as they are, indicate that the texture should set this when outputting displacement. It's disabled for the moment.
-        if(rd->m_outputType == 0)
+        if (LXi_TFX_COLOR == tInp->context)
         {
-            float result_length = sqrt((result[0]*result[0])+(result[1]*result[1])+(result[2]*result[2]));
-            if (LXi_TFX_COLOR == tInp->context)
+            // This should really go to the material displacement height, but there's no obvious way to do this from a texture.
+            // modo expects textures only to send 0-1 ranged values. :(
+            // float scale = m_ocean_scale*rd->m_waveHeight;
+            
+            // Note that modo expects textures to output the right kind of data based on the context. This is the reason for checking against
+            // LXi_TFX_COLOR in the context below. If we aren't driving a color, we output a value instead.
+            // The intent of tInpDsp->enable isn't entirely clear. The docs, such as they are, indicate that the texture should set this when outputting displacement. It's disabled for the moment.
+            // tInpDsp->enable = true;
+            if(rd->m_outputType == 0)
             {
-                // tInpDsp->enable = false;
-                LXx_VSET3 (tOut->color[0], result[0]/result_length, result[1]/result_length, result[2]/result_length);
+                // float result_length = sqrt((result[0]*result[0])+(result[1]*result[1])+(result[2]*result[2]));
+                // mwnormalize(result);
+                tOut->color[0][0] = (result[0]+1)/2;
+                tOut->color[0][1] = (result[1]+1)/2;
+                tOut->color[0][2] = (result[2]+1)/2;
+                // Set by material - except we don't seem to have a way to do this from a texture context.
+                // tInpDsp->amplitude = scale * result_length * rd->m_gain;
             }
-            else
+            else if(rd->m_outputType == 1)	
             {
-                // tInpDsp->enable = true;
-                tOut->value[0] = result[1]/result_length;
+                tOut->color[0][0] = Jvalues[1]; // Jplus
+                tOut->color[0][1] = Jvalues[0]; // Jminus
+                tOut->color[0][2] = 0.0;
             }
-            // Set by material - except we don't seem to have a way to do this from a texture context.
-            // tInpDsp->amplitude = scale * result_length * rd->m_gain;
-        }
-        else if(rd->m_outputType == 1)	
-        {	
-            if (LXi_TFX_COLOR == tInp->context)
-            {
-                LXx_VSET3 (tOut->color[0], m_context->Jplus, m_context->Jminus, 0.0);
-            } else {
-                // tInpDsp->enable = true;
-                tOut->value[0] = m_context->Jminus;
-            }
+        } else {
+            // mwnormalize(result);
+            tOut->value[0] = result[1]*rd->m_gain;
+            tOut->alpha[0] = 1.0;
         }
 	}
 }

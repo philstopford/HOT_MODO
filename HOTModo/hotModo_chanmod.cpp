@@ -107,12 +107,6 @@ hotModoChanMod::cmod_Allocate (
         cm_idx_resolution = index;
         index++;
 
-        // Lookup the index of the 'globalScale' channel and add as an input.
-        modItem.ChannelLookup ("globalScale", &m_idx_globalScale);
-        chanMod.AddInput (item, m_idx_globalScale);
-        cm_idx_globalScale = index;
-        index++;
-
         // Lookup the index of the 'oceanSize' channel and add as an input.
         modItem.ChannelLookup ("oceanSize", &m_idx_size);
         chanMod.AddInput (item, m_idx_size);
@@ -319,11 +313,6 @@ hotModoChanMod::cmod_Flags (
                         return LXfCHMOD_INPUT;
         }
 
-        if (LXx_OK (modItem.ChannelLookup ("globalScale", &chanIdx))) {
-                if (index == chanIdx)
-                        return LXfCHMOD_INPUT;
-        }
-
         if (LXx_OK (modItem.ChannelLookup ("oceanSize", &chanIdx))) {
                 if (index == chanIdx)
                         return LXfCHMOD_INPUT;
@@ -465,6 +454,18 @@ hotModoChanMod::cmod_Flags (
         return 0;
 }
 
+inline void mwnormalize(float *vec)
+{
+	double magSq = vec[0]*vec[0] + vec[1]*vec[1] + vec[2]*vec[2];
+	if (magSq > 0.0f)
+	{ // check for divide-by-zero
+		double oneOverMag = 1.0 / sqrt(magSq);
+		vec[0] *= oneOverMag;
+		vec[1] *= oneOverMag;
+		vec[2] *= oneOverMag;
+	}
+}
+
         LxResult
 hotModoChanMod::cmod_Evaluate (
         ILxUnknownID		 cmod,		// ILxChannelModifierID
@@ -491,19 +492,38 @@ hotModoChanMod::cmod_Evaluate (
     od->m_gain = (float) dTemp;
     chanMod.ReadInputInt (attr, cm_idx_outputType, &iTemp);
     od->m_outputType = iTemp;
+    if(od->m_outputType < 0)
+    {
+        od->m_outputType = 0;
+    }
+    if(od->m_outputType > 1)
+    {
+        od->m_outputType = 1;
+    }
     chanMod.ReadInputInt (attr, cm_idx_resolution, &iTemp);
     od->m_resolution = iTemp;
 	if(od->m_resolution > 12)
     {
         od->m_resolution = 12;
     }
+	if(od->m_resolution < 1)
+    {
+        od->m_resolution = 1;
+    }
 	od->m_resolution = (int) pow(2.0,od->m_resolution);
-    chanMod.ReadInputFloat (attr, cm_idx_globalScale, &dTemp);
-    od->m_globalScale = (float) dTemp;
+
     chanMod.ReadInputInt (attr, cm_idx_size, &iTemp);
     od->m_size = iTemp;
+    if(od->m_size <= 0)
+    {
+        od->m_size = 0.01; // safety value.
+    }
     chanMod.ReadInputFloat (attr, cm_idx_windSpeed, &dTemp);
     od->m_windSpeed = (float) dTemp;
+    if(od->m_windSpeed <= 0)
+    {
+        od->m_windSpeed = 0.01; // safety value.
+    }
     chanMod.ReadInputFloat (attr, cm_idx_windDir, &dTemp);
     od->m_windDir = (float) dTemp;
     chanMod.ReadInputFloat (attr, cm_idx_windAlign, &dTemp);
@@ -638,10 +658,10 @@ hotModoChanMod::cmod_Evaluate (
             Eigenplus[i] = 0.0;
         }
     }
-
-    chanMod.WriteOutputFloat (attr, cm_idx_displacementX, ((result[0]/result_length)+1)/2); // vector, normalize to 0-1, 0.5 is no displacement
-    chanMod.WriteOutputFloat (attr, cm_idx_displacementY, ((result[1]/result_length)+1)/2); // vector, normalize to 0-1, 0.5 is no displacement
-    chanMod.WriteOutputFloat (attr, cm_idx_displacementZ, ((result[2]/result_length)+1)/2); // vector, normalize to 0-1, 0.5 is no displacement
+    mwnormalize(result);
+    chanMod.WriteOutputFloat (attr, cm_idx_displacementX, (result[0]+1)/2); // vector, normalize to 0-1, 0.5 is no displacement
+    chanMod.WriteOutputFloat (attr, cm_idx_displacementY, (result[1]+1)/2); // vector, normalize to 0-1, 0.5 is no displacement
+    chanMod.WriteOutputFloat (attr, cm_idx_displacementZ, (result[2]+1)/2); // vector, normalize to 0-1, 0.5 is no displacement
     chanMod.WriteOutputFloat (attr, cm_idx_normalsX, normals[0]); // vector
     chanMod.WriteOutputFloat (attr, cm_idx_normalsY, normals[1]); // vector
     chanMod.WriteOutputFloat (attr, cm_idx_normalsZ, normals[2]); // vector
@@ -680,6 +700,21 @@ hotModoChanModPackage::hotModoChanModPackage ()
         chanmod_factory.AddInterface (new CLxIfc_ChannelModItem<hotModoChanMod>);
 }
 
+// UI Hints to define min and max
+// & is for int
+// % is for float
+static LXtTextValueHint hint_outputType[] = {
+    0,			"&min",		// int min 0
+    1,			"&max",		// int max 1
+    -1,			NULL
+};
+static LXtTextValueHint hint_resolution[] = {
+    1,			"&min",		// int min 1
+    12,			"&max",		// int max 12
+    -1,			NULL
+};
+
+
         LxResult
 hotModoChanModPackage::pkg_SetupChannels (
         ILxUnknownID		 addChan)
@@ -702,12 +737,11 @@ hotModoChanModPackage::pkg_SetupChannels (
 
         ac.NewChannel ("outputType", LXsTYPE_INTEGER);
         ac.SetDefault (0.0, 0);
+        ac.SetHint (hint_outputType);
 
         ac.NewChannel ("resolution", LXsTYPE_INTEGER);
         ac.SetDefault (0.0, 6);        
-
-        ac.NewChannel ("globalScale", LXsTYPE_FLOAT);
-        ac.SetDefault (1.0, 0);
+        ac.SetHint (hint_resolution);
 
         ac.NewChannel ("oceanSize", LXsTYPE_FLOAT);
         ac.SetDefault (200.0f, 0);        

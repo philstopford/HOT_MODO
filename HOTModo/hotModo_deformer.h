@@ -76,11 +76,6 @@ class CChanState : public CLxObject
 		bool			 enabled;
 		int				 resolution;
         int outputType;
-		float globalScale;
-		float scaleU;
-		float scaleV;
-		float offsetU;
-		float offsetV;
 		float size;
 		float windSpeed;
 		float windDir;

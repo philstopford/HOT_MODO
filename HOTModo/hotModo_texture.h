@@ -47,11 +47,6 @@ class hotModoTexture : public CLxImpl_ValueTexture
 		unsigned m_idx_gain;
 		unsigned m_idx_outputType;
 		unsigned m_idx_resolution;
-		unsigned m_idx_globalScale;
-		unsigned m_idx_scaleU;
-		unsigned m_idx_scaleV;
-		unsigned m_idx_offsetU;
-		unsigned m_idx_offsetV;
 		unsigned m_idx_size;
 		unsigned m_idx_windSpeed;
 		unsigned m_idx_windDir;
@@ -71,11 +66,6 @@ class hotModoTexture : public CLxImpl_ValueTexture
 		float m_gainCache;
 		int m_outputType;
 		int	m_resolutionCache;
-		float m_globalScaleCache;
-		float m_scaleUCache;
-		float m_scaleVCache;
-		float m_offsetUCache;
-		float m_offsetVCache;
 		float m_sizeCache;
 		float m_windSpeedCache;
 		float m_windDirCache;
@@ -95,11 +85,6 @@ class hotModoTexture : public CLxImpl_ValueTexture
 				float m_gain;
 				int m_outputType;
 				int	m_resolution;
-				float m_globalScale;
-				float m_scaleU;
-				float m_scaleV;
-				float m_offsetU;
-				float m_offsetV;
 				float m_size;
 				float m_windSpeed;
 				float m_windDir;

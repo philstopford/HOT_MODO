@@ -62,7 +62,6 @@ class hotModoChanMod
         unsigned m_idx_gain;
         unsigned m_idx_outputType;
         unsigned m_idx_resolution;
-        unsigned m_idx_globalScale;
         unsigned m_idx_size;
         unsigned m_idx_windSpeed;
         unsigned m_idx_windDir;
@@ -101,7 +100,6 @@ class hotModoChanMod
         unsigned cm_idx_gain;
         unsigned cm_idx_outputType;
         unsigned cm_idx_resolution;
-        unsigned cm_idx_globalScale;
         unsigned cm_idx_size;
         unsigned cm_idx_windSpeed;
         unsigned cm_idx_windDir;
@@ -136,7 +134,6 @@ class hotModoChanMod
 
         float m_gainCache;
         int	m_resolutionCache;
-        float m_globalScaleCache;
         float m_sizeCache;
         float m_windSpeedCache;
         float m_windDirCache;
