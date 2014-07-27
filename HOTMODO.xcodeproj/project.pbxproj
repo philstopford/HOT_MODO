@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		4A409C78195DEA3D00811118 /* libIex.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A409C77195DEA3D00811118 /* libIex.dylib */; };
 		4A5D6720194B271500F40542 /* Ocean.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A5D671E194B271500F40542 /* Ocean.h */; };
+		4A5F804B1984A29100233605 /* hotModo_chanmod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4ADC33B519776718000321CC /* hotModo_chanmod.cpp */; };
+		4A5F804C1984A29500233605 /* hotModo_chanmod.h in Headers */ = {isa = PBXBuildFile; fileRef = 4ADC33B619776718000321CC /* hotModo_chanmod.h */; };
 		4A648D821975CEA1004E2515 /* hotModo_texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AFBD3C0191E6B5F00181ED4 /* hotModo_texture.cpp */; };
 		4A648D831975CEA4004E2515 /* hotModo_texture.h in Headers */ = {isa = PBXBuildFile; fileRef = 4AFBD3C1191E6B5F00181ED4 /* hotModo_texture.h */; };
 		4A714559195DE771006CBEDE /* libImath.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A714557195DE771006CBEDE /* libImath.dylib */; };
@@ -32,8 +34,6 @@
 		4A7B515B161801210091E644 /* lxu_surface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A7B5148161801210091E644 /* lxu_surface.cpp */; };
 		4A7B515C161801210091E644 /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A7B5149161801210091E644 /* util.cpp */; };
 		4A7B51601618018B0091E644 /* libcommon.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A7B5132161801040091E644 /* libcommon.a */; };
-		4ADC33B719776718000321CC /* hotModo_chanmod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4ADC33B519776718000321CC /* hotModo_chanmod.cpp */; };
-		4ADC33B819776718000321CC /* hotModo_chanmod.h in Headers */ = {isa = PBXBuildFile; fileRef = 4ADC33B619776718000321CC /* hotModo_chanmod.h */; };
 		4AFBD3C4191E6B5F00181ED4 /* hotModo_command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AFBD3BA191E6B5F00181ED4 /* hotModo_command.cpp */; };
 		4AFBD3C5191E6B5F00181ED4 /* hotModo_command.h in Headers */ = {isa = PBXBuildFile; fileRef = 4AFBD3BB191E6B5F00181ED4 /* hotModo_command.h */; };
 		4AFBD3C6191E6B5F00181ED4 /* hotModo_deformer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AFBD3BC191E6B5F00181ED4 /* hotModo_deformer.cpp */; };
@@ -218,7 +218,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4ADC33B819776718000321CC /* hotModo_chanmod.h in Headers */,
+				4A5F804C1984A29500233605 /* hotModo_chanmod.h in Headers */,
 				4A648D831975CEA4004E2515 /* hotModo_texture.h in Headers */,
 				4AFBD3C5191E6B5F00181ED4 /* hotModo_command.h in Headers */,
 				4AFBD3C7191E6B5F00181ED4 /* hotModo_deformer.h in Headers */,
@@ -326,7 +326,7 @@
 				4AFBD3C6191E6B5F00181ED4 /* hotModo_deformer.cpp in Sources */,
 				4AFBD3C4191E6B5F00181ED4 /* hotModo_command.cpp in Sources */,
 				4A648D821975CEA1004E2515 /* hotModo_texture.cpp in Sources */,
-				4ADC33B719776718000321CC /* hotModo_chanmod.cpp in Sources */,
+				4A5F804B1984A29100233605 /* hotModo_chanmod.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
