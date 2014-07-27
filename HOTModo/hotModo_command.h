@@ -65,13 +65,13 @@ class CItemSelectionTracker :
             pkt_item.autoInit ();
         }
 
-		void selevent_Add (LXtID4 type, unsigned int subtype)LXx_OVERRIDE
+		void selevent_Add (LXtID4 type, unsigned int subtype) LXx_OVERRIDE
         {
             if (type == selID_item)
                     is_valid = false;
         }
 
-		void selevent_Remove (LXtID4 type, unsigned int subtype)LXx_OVERRIDE
+		void selevent_Remove (LXtID4 type, unsigned int subtype) LXx_OVERRIDE
         {
             if (type == selID_item)
                     is_valid = false;

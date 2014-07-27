@@ -33,11 +33,11 @@ class hotModoTexture : public CLxImpl_ValueTexture
 		hotModoTexture ();
 		~hotModoTexture ();
 
-        LxResult		vtx_SetupChannels (ILxUnknownID addChan);
-        LxResult		vtx_LinkChannels  (ILxUnknownID eval, ILxUnknownID item);
-        LxResult		vtx_ReadChannels  (ILxUnknownID attr, void **ppvData);
-        void			vtx_Evaluate      (ILxUnknownID vector, LXpTextureOutput *tOut, void *data);
-        void			vtx_Cleanup       (void *data);
+        LxResult		vtx_SetupChannels (ILxUnknownID addChan) LXx_OVERRIDE;
+        LxResult		vtx_LinkChannels  (ILxUnknownID eval, ILxUnknownID item) LXx_OVERRIDE;
+        LxResult		vtx_ReadChannels  (ILxUnknownID attr, void **ppvData) LXx_OVERRIDE;
+        void			vtx_Evaluate      (ILxUnknownID etor, int *idx, ILxUnknownID vector, LXpTextureOutput *tOut, void *data) LXx_OVERRIDE;
+        void			vtx_Cleanup       (void *data) LXx_OVERRIDE;
 
 		LXtItemType		MyType ();
         CLxUser_PacketService	pkt_service;

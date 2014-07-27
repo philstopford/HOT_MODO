@@ -34,7 +34,7 @@ class CInstance : public CLxImpl_PackageInstance
 		CLxUser_Item	 m_item;
 
 		LxResult	pins_Initialize (ILxUnknownID item, ILxUnknownID super)	LXx_OVERRIDE;
-		void		pins_Cleanup (void)LXx_OVERRIDE;
+		void		pins_Cleanup (void) LXx_OVERRIDE;
 };	
 
 

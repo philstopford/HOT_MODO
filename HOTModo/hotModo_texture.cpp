@@ -246,7 +246,7 @@ inline float remapValue(float value, float min, float max, float min2, float max
 	return min2 + (value - min) * (max2 - min2) / (max - min);
 }
 
-void hotModoTexture::vtx_Evaluate (ILxUnknownID vector, LXpTextureOutput *tOut, void *data)
+void hotModoTexture::vtx_Evaluate (ILxUnknownID etor, int *idx, ILxUnknownID vector, LXpTextureOutput *tOut, void *data)
 {
     RendData		*rd = (RendData *) data;
     LXpTextureInput		*tInp;
@@ -263,20 +263,19 @@ void hotModoTexture::vtx_Evaluate (ILxUnknownID vector, LXpTextureOutput *tOut, 
         m_context->eval2_xz(tInp->uvw[0], tInp->uvw[2], result, normals, Jvalues, Eigenminus, Eigenplus);
 
 		tOut->direct   = 1;
+        // Note that modo expects textures to output the right kind of data based on the context. This is the reason for checking against
+        // LXi_TFX_COLOR in the context below. If we aren't driving a color, we output a value instead.
         if (LXi_TFX_COLOR == tInp->context)
         {
             // This should really go to the material displacement height, but there's no obvious way to do this from a texture.
             // modo expects textures only to send 0-1 ranged values. :(
             // float scale = m_ocean_scale*rd->m_waveHeight;
             
-            // Note that modo expects textures to output the right kind of data based on the context. This is the reason for checking against
-            // LXi_TFX_COLOR in the context below. If we aren't driving a color, we output a value instead.
             // The intent of tInpDsp->enable isn't entirely clear. The docs, such as they are, indicate that the texture should set this when outputting displacement. It's disabled for the moment.
             // tInpDsp->enable = true;
             if(rd->m_outputType == 0)
             {
-                // float result_length = sqrt((result[0]*result[0])+(result[1]*result[1])+(result[2]*result[2]));
-                // mwnormalize(result);
+                mwnormalize(result);
                 tOut->color[0][0] = (result[0]+1)/2;
                 tOut->color[0][1] = (result[1]+1)/2;
                 tOut->color[0][2] = (result[2]+1)/2;

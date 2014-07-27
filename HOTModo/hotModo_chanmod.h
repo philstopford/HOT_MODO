@@ -43,18 +43,18 @@ class hotModoChanMod
         drw::Ocean        *m_ocean;
         drw::OceanContext *m_context;
 
-        LxResult		 pins_Initialize (ILxUnknownID item, ILxUnknownID super);
-        void			 pins_Cleanup (void);
-        LxResult		 pins_SynthName (char *buf, unsigned len);
+        LxResult		 pins_Initialize (ILxUnknownID item, ILxUnknownID super) LXx_OVERRIDE;
+        void			 pins_Cleanup (void) LXx_OVERRIDE;
+        LxResult		 pins_SynthName (char *buf, unsigned len) LXx_OVERRIDE;
 
-        unsigned int		 cmod_Flags (ILxUnknownID item, unsigned int index);
+        unsigned int		 cmod_Flags (ILxUnknownID item, unsigned int index) LXx_OVERRIDE;
         LxResult		 cmod_Allocate (
                                         ILxUnknownID cmod,
                                         ILxUnknownID eval,
                                         ILxUnknownID item,
-                                        void **ppvData);
-        void			 cmod_Cleanup (void *data);
-        LxResult		 cmod_Evaluate (ILxUnknownID cmod, ILxUnknownID attr, void *data);
+                                        void **ppvData) LXx_OVERRIDE;
+        void			 cmod_Cleanup (void *data) LXx_OVERRIDE;
+        LxResult		 cmod_Evaluate (ILxUnknownID cmod, ILxUnknownID attr, void *data) LXx_OVERRIDE;
 
         // Indices for ChannelLookup, Flags, etc.
         unsigned m_idx_x;
