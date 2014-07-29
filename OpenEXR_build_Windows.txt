@@ -1,0 +1,48 @@
+Part 1:
+
+1- First go to www.openexr.com/downloads.html and download the latest release of OpenEXR and ILMBase
+
+2- Download the latest source code of zlib and the precompiled release too from here www.winimage.com/zLibDll/index.html
+
+3- Create a directory "C:\Programming\OpenEXR" and extract all the downloaded archive files there
+
+4- Inside the directory of ILMBase, go to vc\vc8\IlmBase and open the Visual Studio solution. Follow the standard steps to convert the solution to VS10
+
+5- Hit F7 so you can get a list of the errors. We'll solve them one by one.
+
+Error 1 error C3861: '__builtin_trap': identifier not found
+
+Open the properties of the Iex project, select "All Configurations" and "All Platforms", then go to C++/Preprocessor. In Preprocessor Definitions, add the macros PLATFORM_WINDOWS and OPENEXR_DLL. The latter is needed to build the DLL library.
+
+Compile the solution again. If you see an error like this "error LNK1104: cannot open file '..\Win32\Debug\Iex.map'", hit F7 again and it should disappear.
+
+7- Now in the error list, you should see something like this
+"Error 1 error C1083: Cannot open include file: 'IlmBaseConfig.h': No such file or directory    c:\programming\openexr\ilmbase-2.1.0\imath\imathnamespace.h    78"
+
+Always pay careful attention in which project the error is located. In our case, it is in project Imath. So go the properties of Imath, select all configurations and platforms, go to C++/General, then in "Additional Include Directories" add the following line "..\..\..\..\config.windows". Do the same thing for projects Iex and IexTest.
+
+If you still encounter the same error, try compiling each project one by one separately starting from Iex, Half, IlmThread then Imath. Do a rebuild for each project if the error persists. If the debug build succeeded, switch to the release configuration and build the solution again.
+
+Now you should have a directory named Deploy in C:\Programming, that contains everything you need to start developing with ILMBase.
+
+And that's it! Now we can use the compiled ILMBase to build OpenEXR.
+
+Part 2:
+
+1- Open the Visual Studio solution in vc\vc8\OpenEXR and the convert it to VS10 if necessary
+
+2- Copy zlib.h, zconf.h from the zlib source directory and halfExport.h from ilmbase\half to Deploy\include
+
+3- Copy zlibwapi.lib to Deploy\lib\Win32\Debug and Deploy\lib\Win32\Release. Also copy zlibwapi.exp and zlibwapi.dll to Deploy\bin\Win32\Debug and Deploy\bin\Win32\Release
+
+4- Now hit F7 and you should receive a long list of link errors. Strangely enough, some files were not added to the IlmImf project so we're going to add them manually
+
+Right click at project IlmImf and add all *.hpp and *.cpp files. We could've added only the missing ones, but then we have to analyze every linking error to find out which functions definition were missing.
+
+5- Now in the properties window of project IlmImf, select all configurtions and all platforms, go to C++/Preprocessor and add these macros ZLIB_DLL, ZLIB_WINAPI
+
+6- Compile the solution again and you should receive a build success.
+
+Congratulations! You have successfully built OpenEXR :)
+
+P.S. Building the OpenEXR tools is not mandatory, but if you find any problem building them, let me know.

@@ -1,11 +1,69 @@
-README
+HOT for modo
+============
 
-Due to OS X packaging quirks, you'll need to massage the build slightly.
-I've tried to add build scripts to do this, but I'm not convinced that they work properly. If they don't, you'll need to use 'install_name_tool -change' to force the library look-ups to match :
+This project is built off code written originally by Mark Wilson. He was unable to complete the work and passed it to Greg Duquesne at Luxology who didn't have the time to work on it and eventually I managed to get hold of the code. The original code is archived for reference.
 
+With the generous help and guidance of Pete Segal, Matt Cox, Mike Wolf and Gwynne Reddick, the plugin is now approaching usable state.
 
-libIex (in the plugin and also the libImath library in Frameworks):
-	@loader_path/../Frameworks/libIex.7.0.0.dylib (compatibility version 7.0.0, current version 1.0.3)
+What was done.
+==============
+
+- Libraries were all updated (with the exception of blitz++ which seems to have some issues with XCode as of 0.10)
+
+- A channel modifier has been added to support the maximum range of abilities. It's much slower than the texture, though. It's also using an additional set of overloaded methods to accomplish its task
+
+- The texture plugin was sorted out.
+
+- The deformer was cleaned up a bit. A bunch of user controls made no sense so have been removed; the original code appeared to try and enable sub-resolution vertex position adjustments which seemed to make no sense. Those controls and the related code were removed. Reference was made to the LW port of HOT and some of the internals were changed to match.
+
+- A bigger challenge was threading support. modo auto-threads deformers on meshes with more than 512 vertices. This led to a some confusion during updating this plugin as some test meshes were light and some were dense. The dense ones showed random artifacts. Validating the assumption was straightforward by adding a mutex and locking the entire Offset() function, at which point the artifacts went away, but performance was abysmal on large meshes.
+
+	The main issue was that the use of disp[] belonging to the ocean context in Offset() is not thread-safe. The initial path attempted was to use thread local storage via modo's Threadslot system, but it became unclear (to me) how to effectively do this given the separation of checks and balances regarding ocean validity and the point of use of the data.
+
+	Local variables are per-thread and it's then that light dawned. With overloaded functions to accept the 3rd argument in Ocean.h, the purposes and intent of result[] was obvious. With that single small adjustment, the threading issues went away.
+
+	The same approach is true in the texture and the same fix has been applied
+
+- The deformer code was refactored to move the code out of the header to the source file.
+
+- The UI XML was also adjusted to make it work as a kit and to align channel names, etc. The deformer had various seemingly useless channels that have been removed.
+
+fftw3 notes :
+=============
+
+	Mac:
+
+		Configure with :
+
+		./configure --with-pic --enable-threads --enable-static --enable-single --enable-sse --enable-sse2 --with-combined-threads
+
+	Windows:
+
+		From source:
+			Important: If you want to compile FFTW as a DLL, you should add a line #define FFTW_DLL to fftw3.h and ifftw.h before compiling. This will add the requisite __declspec decorations to function declarations etc. 
+
+		From binaries:
+			These DLLs were created by us, cross-compiled from GNU/Linux using MinGW; the 64-bit version is possible thanks to the mingw-w64 project. You should be able to call them from any compiler. In order to link to them from Visual C++, you will need to create .lib "import libraries" using the lib.exe program included with VC++. Run:
+
+				lib /def:libfftw3-3.def
+				lib /def:libfftw3f-3.def
+				lib /def:libfftw3l-3.def
+
+			On Visual Studio 2008 in 64-bit mode, and possibly in other cases, you may need to specify the machine explicitly:
+
+				lib /machine:x64 /def:libfftw3l-3.def
+
+OSX
+===
+Due to OS X packaging quirks, you'll need to massage the build slightly. You'll need to use 'install_name_tool -change' to force the library look-ups to match :
+
+libIex
+	@loader_path/libIex-2_1.11.dylib
 
 libImath (in the plugin):
-	@loader_path/../Frameworks/libImath.7.0.0.dylib (compatibility version 7.0.0, current version 1.0.3)
+	@loader_path/libImath-2_1.11.dylib
+
+Win64
+=====
+
+The Win64 project is in-progress.
