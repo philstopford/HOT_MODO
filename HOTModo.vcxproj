@@ -136,14 +136,15 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>ZLIB_DLL;ZLIB_WINAPI;WIN32;NDEBUG;_WINDOWS;_USRDLL;HOTMODO_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.\dependencies\hot-master\3rdparty\OpenEXR\ilmbase-2.1.0\config.windows;.\dependencies\hot-master\3rdparty\OpenEXR\ilmbase-2.1.0\Imath;.\dependencies\hot-master\3rdparty\src\blitz-0.9;.\dependencies\hot-master\3rdparty\src;.\dependencies\hot-master\3rdparty\src\fftw-3.3.4\api;.\dependencies\hot-master;C:\Users\Phil\Documents\modo\LXSDK_73095\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Phil\Documents\modo\hotModo\dependencies\hot-master\3rdparty\Deploy\include;.\dependencies\hot-master\3rdparty\src\blitz-0.9;.\dependencies\hot-master\3rdparty\src;.\dependencies\hot-master\3rdparty\src\fftw-3.3.4\api;.\dependencies\hot-master;C:\Users\Phil\Documents\modo\LXSDK_73095\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Users\Phil\Documents\modo\hotModo\commonLib\x64\Release;C:\Users\Phil\Documents\modo\hotModo\dependencies\lib\win64\fftw-3.3.4-dll64;C:\Users\Phil\Documents\modo\hotModo\dependencies\hot-master\3rdparty\OpenEXR\ilmbase-2.1.0\vc\vc12\IlmBase\Imath\x64\Release;C:\Users\Phil\Documents\modo\hotModo\dependencies\hot-master\3rdparty\OpenEXR\ilmbase-2.1.0\vc\vc12\IlmBase\Iex\x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Phil\Documents\modo\hotModo\x64\Release;C:\Users\Phil\Documents\modo\hotModo\dependencies\lib\win64\fftw-3.3.4;C:\Users\Phil\Documents\modo\hotModo\dependencies\hot-master\3rdparty\Deploy\lib\x64\Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>commonLib.lib; Imath.lib; Iex.lib; libfftw3-3.lib;libfftw3f-3.lib;libfftw3l-3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
