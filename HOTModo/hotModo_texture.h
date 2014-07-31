@@ -36,7 +36,11 @@ class hotModoTexture : public CLxImpl_ValueTexture
         LxResult		vtx_SetupChannels (ILxUnknownID addChan) LXx_OVERRIDE;
         LxResult		vtx_LinkChannels  (ILxUnknownID eval, ILxUnknownID item) LXx_OVERRIDE;
         LxResult		vtx_ReadChannels  (ILxUnknownID attr, void **ppvData) LXx_OVERRIDE;
+#ifdef MODO701
+        void			vtx_Evaluate      (ILxUnknownID vector, LXpTextureOutput *tOut, void *data) LXx_OVERRIDE;
+#else
         void			vtx_Evaluate      (ILxUnknownID etor, int *idx, ILxUnknownID vector, LXpTextureOutput *tOut, void *data) LXx_OVERRIDE;
+#endif
         void			vtx_Cleanup       (void *data) LXx_OVERRIDE;
 
 		LXtItemType		MyType ();
@@ -46,6 +50,7 @@ class hotModoTexture : public CLxImpl_ValueTexture
 
 		unsigned m_idx_gain;
 		unsigned m_idx_outputType;
+        unsigned m_idx_jacobianOutputMode;
 		unsigned m_idx_resolution;
 		unsigned m_idx_size;
 		unsigned m_idx_windSpeed;
@@ -64,7 +69,6 @@ class hotModoTexture : public CLxImpl_ValueTexture
 		float m_ocean_scale;
 
 		float m_gainCache;
-		int m_outputType;
 		int	m_resolutionCache;
 		float m_sizeCache;
 		float m_windSpeedCache;
@@ -84,6 +88,7 @@ class hotModoTexture : public CLxImpl_ValueTexture
 
 				float m_gain;
 				int m_outputType;
+                int m_jacobianOutputMode;
 				int	m_resolution;
 				float m_size;
 				float m_windSpeed;

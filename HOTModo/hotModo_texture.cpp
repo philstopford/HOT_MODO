@@ -9,6 +9,8 @@ LXtTagInfoDesc	 hotModoTexture::descInfo[] = {
 
 #define SRVs_TEXTURE		"hotModo.texture"
 #define SRVs_ITEMTYPE		SRVs_TEXTURE
+// OS X defines this. MSVC doesn't.
+#define M_PI        3.14159265358979323846264338327950288   /* pi             */
 
 hotModoTexture::hotModoTexture ()
 {
@@ -34,6 +36,24 @@ LXtItemType hotModoTexture::MyType ()
     return my_type;
 }
 
+static LXtTextValueHint hint_outputType[] = {
+    0,			"&min",		// int min 0
+    1,			"&max",		// int max 1
+    -1,			NULL
+};
+
+static LXtTextValueHint hint_resolution[] = {
+    1,			"&min",		// int min 1
+    12,			"&max",		// int max 12
+    -1,			NULL
+};
+
+static LXtTextValueHint hint_jacobianOutputMode[] = {
+    0,			"&min",		// int min 0
+    5,			"&max",		// int max 5
+    -1,			NULL
+};
+
 /*
  * Setup channels for the item type.
  */
@@ -46,9 +66,15 @@ LxResult hotModoTexture::vtx_SetupChannels (ILxUnknownID addChan)
 	
 	ac.NewChannel  ("outputType",	LXsTYPE_INTEGER);
 	ac.SetDefault  (0.0, 0);
+    ac.SetHint(hint_outputType);
+
+    ac.NewChannel  ("jacobianOutputMode",	LXsTYPE_INTEGER);
+	ac.SetDefault  (0.0, 0);
+    ac.SetHint(hint_jacobianOutputMode);
 
 	ac.NewChannel  ("resolution",	LXsTYPE_INTEGER);
 	ac.SetDefault  (0.0, 6);
+    ac.SetHint(hint_resolution);
 
 	ac.NewChannel  ("oceanSize",	LXsTYPE_FLOAT);
 	ac.SetDefault  (200.0f, 0);
@@ -93,6 +119,7 @@ LxResult hotModoTexture::vtx_LinkChannels (ILxUnknownID eval, ILxUnknownID	item)
 
 	m_idx_gain = ev.AddChan (item, "gain");
 	m_idx_outputType = ev.AddChan (item, "outputType");
+	m_idx_jacobianOutputMode = ev.AddChan (item, "jacobianOutputMode");
 	m_idx_resolution = ev.AddChan (item, "resolution");
 	m_idx_size = ev.AddChan (item, "oceanSize");
 	m_idx_windSpeed = ev.AddChan (item, "windSpeed");
@@ -132,6 +159,16 @@ LxResult hotModoTexture::vtx_ReadChannels(ILxUnknownID attr, void  **ppvData)
 	if(rd->m_outputType > 1)
     {
         rd->m_outputType = 1;
+    }
+
+    rd->m_jacobianOutputMode = at.Int(m_idx_jacobianOutputMode);
+	if(rd->m_jacobianOutputMode < 0)
+    {
+        rd->m_jacobianOutputMode = 0;
+    }
+	if(rd->m_jacobianOutputMode > 5)
+    {
+        rd->m_jacobianOutputMode = 5;
     }
 
 	rd->m_resolution = at.Int(m_idx_resolution);
@@ -246,7 +283,11 @@ inline float remapValue(float value, float min, float max, float min2, float max
 	return min2 + (value - min) * (max2 - min2) / (max - min);
 }
 
+#ifdef MODO701
+void hotModoTexture::vtx_Evaluate (ILxUnknownID vector, LXpTextureOutput *tOut, void *data)
+#else
 void hotModoTexture::vtx_Evaluate (ILxUnknownID etor, int *idx, ILxUnknownID vector, LXpTextureOutput *tOut, void *data)
+#endif
 {
     RendData		*rd = (RendData *) data;
     LXpTextureInput		*tInp;
@@ -255,7 +296,7 @@ void hotModoTexture::vtx_Evaluate (ILxUnknownID etor, int *idx, ILxUnknownID vec
     tInp = (LXpTextureInput *) pkt_service.FastPacket (vector, tin_offset);
 	tInpDsp = (LXpDisplace *) pkt_service.FastPacket (vector, tinDsp_offset);
 
-    float result[3], normals[3], Eigenminus[3], Eigenplus[3], Jvalues[2];
+    float result[3], normals[3], foam[3], spray[3], Eigenminus[3], Eigenplus[3], Jvalues[2];
     
     // We'll need a seriously overloaded function here to cover all bases due to threading :/
 	if(m_ocean != NULL && m_context != NULL)
@@ -265,17 +306,21 @@ void hotModoTexture::vtx_Evaluate (ILxUnknownID etor, int *idx, ILxUnknownID vec
 		tOut->direct   = 1;
         // Note that modo expects textures to output the right kind of data based on the context. This is the reason for checking against
         // LXi_TFX_COLOR in the context below. If we aren't driving a color, we output a value instead.
+        // The intent of tInpDsp->enable isn't entirely clear. The docs, such as they are, indicate that the texture should set this when outputting displacement.
+        tInpDsp->enable = true;
+
+        mwnormalize(result);
+        tOut->value[0] = result[1]; //*rd->m_gain; // not sure it is a good idea to use gain here.
+        tOut->alpha[0] = 1.0;
+
         if (LXi_TFX_COLOR == tInp->context)
         {
             // This should really go to the material displacement height, but there's no obvious way to do this from a texture.
             // modo expects textures only to send 0-1 ranged values. :(
             // float scale = m_ocean_scale*rd->m_waveHeight;
             
-            // The intent of tInpDsp->enable isn't entirely clear. The docs, such as they are, indicate that the texture should set this when outputting displacement. It's disabled for the moment.
-            // tInpDsp->enable = true;
             if(rd->m_outputType == 0)
             {
-                mwnormalize(result);
                 tOut->color[0][0] = (result[0]+1)/2;
                 tOut->color[0][1] = (result[1]+1)/2;
                 tOut->color[0][2] = (result[2]+1)/2;
@@ -284,14 +329,83 @@ void hotModoTexture::vtx_Evaluate (ILxUnknownID etor, int *idx, ILxUnknownID vec
             }
             else if(rd->m_outputType == 1)	
             {
-                tOut->color[0][0] = Jvalues[1]; // Jplus
-                tOut->color[0][1] = Jvalues[0]; // Jminus
-                tOut->color[0][2] = 0.0;
+                // Sort out our J floats
+                float Jminus = Jvalues[0];
+                float Jplus = Jvalues[1];
+                
+                // Foam
+                if (Jminus < 0.0)
+                {
+                    foam[0] = -Jminus;
+                    foam[1] = -Jminus;
+                    foam[2] = -Jminus;
+                }
+                
+                // Spray
+                float jt = 1.0;
+                
+                if (Jminus < jt)
+                {
+                    spray[0] = -Jminus;
+                    spray[1] = -Jminus;
+                    spray[2] = -Jminus;
+                }
+                
+                float jt_jm = jt - Jminus;
+                
+                float veminus[3];
+                for (int i = 0; i <= 2; i++)
+                {
+                    veminus[i] = Eigenminus[i] * jt_jm;
+                }
+                
+                for (int i = 0; i <= 2; i++)
+                {
+                    spray[i] = veminus[i] + normals[i] / sqrt ( 1.0 + (jt_jm * jt_jm));
+                }
+                
+                if (Jminus < 0.0)
+                {
+                    Jminus = -Jminus;
+                }
+
+                if(rd->m_jacobianOutputMode == 0) // default
+                {
+                    tOut->color[0][0] = Jplus; // Jplus
+                    tOut->color[0][1] = Jminus; // Jminus
+                    tOut->color[0][2] = 0.0;
+                }
+                if(rd->m_jacobianOutputMode == 1) // Normals
+                {
+                    tOut->color[0][0] = normals[0];
+                    tOut->color[0][1] = normals[1];
+                    tOut->color[0][2] = normals[2];
+                }
+                if(rd->m_jacobianOutputMode == 2) // Foam
+                {
+                    tOut->color[0][0] = foam[0];
+                    tOut->color[0][1] = foam[1];
+                    tOut->color[0][2] = foam[2];
+                }
+                if(rd->m_jacobianOutputMode == 3) // Spray
+                {
+                    tOut->color[0][0] = spray[0];
+                    tOut->color[0][1] = spray[1];
+                    tOut->color[0][2] = spray[2];
+                }
+                if(rd->m_jacobianOutputMode == 4) // Eigenminus
+                {
+                    tOut->color[0][0] = Eigenminus[0];
+                    tOut->color[0][1] = Eigenminus[1];
+                    tOut->color[0][2] = Eigenminus[2];
+                }
+                if(rd->m_jacobianOutputMode == 5) // Eigenplus
+                {
+                    tOut->color[0][0] = Eigenplus[0];
+                    tOut->color[0][1] = Eigenplus[1];
+                    tOut->color[0][2] = Eigenplus[2];
+                }
             }
-        } else {
-            // mwnormalize(result);
-            tOut->value[0] = result[1]*rd->m_gain;
-            tOut->alpha[0] = 1.0;
         }
 	}
 }

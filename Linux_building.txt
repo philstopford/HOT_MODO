@@ -1,0 +1,12 @@
+This kit was successfully built under Ubuntu 12.04
+
+You need to install the -dev packages using your favorite package manager :
+
+libIlmBase
+libloki
+libfftw3
+libfftw3l
+libfftw3_threads
+libblitz
+
+You will need to adjust the LXSDK related path in the Makefile. Then just issue make. The binary will be in Linux/build as hotmodo.lx

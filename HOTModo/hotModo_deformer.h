@@ -11,13 +11,13 @@
 #include <lx_select.hpp>
 #include <string>
 #include <math.h>
-#include <mutex>
+// #include <mutex>
 
 #include "Ocean.h"
 
 namespace hotModoDeformer {	// disambiguate everything with a namespace
 
-std::mutex myMutex; // global variable
+// std::mutex myMutex; // global variable
 
 #define SRVNAME_ITEMTYPE		"hotModoDeform"
 #define SRVNAME_MODIFIER		"hotModoDeform"

@@ -1,0 +1,19 @@
+Blitz breakage.
+
+Under OS X, the compiler doesn't complain, but MSVC really hates the default blitz 0.10 code in slice.h. The version in this source has been modified to address the problem. Basically, MSVC hates this kind of thing :
+
+template<typename T>
+class ArraySectionInfo {
+public:
+    static const int isValidType = 0, rank = 0, isPick = 0;
+};
+
+It's easily resolved by changing each case to the form :
+
+template<typename T>
+class ArraySectionInfo {
+public:
+    static const int isValidType = 0;
+    static const int rank = 0;
+    static const int isPick = 0;
+};

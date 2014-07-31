@@ -3,11 +3,11 @@
 #include <lx_plugin.hpp>
 
 #include <string>
-#include <mutex>
+// #include <mutex>
 
 using namespace hotModoChanModNameSpace;
 
-std::mutex myMutex; // global variable
+// std::mutex myMutex; // global variable
 
 hotModoChanMod::hotModoChanMod ()
 {
@@ -603,7 +603,6 @@ hotModoChanMod::cmod_Evaluate (
     
     // Now we sort out foam and spray based on operating mode. Need Jacobian otherwise we'll send out zeros.
     // Lifted and adapted from the LW plugin port.
-    float result_length = sqrt((result[0]*result[0])+(result[1]*result[1])+(result[2]*result[2]));
 
     if (od->m_outputType == 1)
     {

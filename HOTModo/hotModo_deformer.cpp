@@ -45,6 +45,18 @@ LXtTagInfoDesc CPackage::descInfo[] = {
         { 0 }
 };
 
+static LXtTextValueHint hint_outputType[] = {
+    0,			"&min",		// int min 0
+    1,			"&max",		// int max 1
+    -1,			NULL
+};
+
+static LXtTextValueHint hint_resolution[] = {
+    1,			"&min",		// int min 1
+    12,			"&max",		// int max 12
+    -1,			NULL
+};
+
 LxResult CPackage::pkg_SetupChannels(ILxUnknownID addChan)
 {
 	CLxUser_AddChannel	 ac (addChan);
@@ -62,9 +74,11 @@ LxResult CPackage::pkg_SetupChannels(ILxUnknownID addChan)
 
     ac.NewChannel  ("outputType",	LXsTYPE_INTEGER);
 	ac.SetDefault  (0.0, 0);
+    ac.SetHint(hint_outputType);
 
 	ac.NewChannel  ("resolution",	LXsTYPE_INTEGER);
 	ac.SetDefault  (0.0, 6);
+    ac.SetHint(hint_resolution);
 
 	ac.NewChannel  ("oceanSize",	LXsTYPE_FLOAT);
 	ac.SetDefault  (200.0f, 0);
