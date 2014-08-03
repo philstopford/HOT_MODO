@@ -1,6 +1,8 @@
 #include "hotModo_texture.h"
 #include <lxu_math.hpp>
 
+using namespace hotModoTextureNameSpace;
+
 LXtTagInfoDesc	 hotModoTexture::descInfo[] = {
         { LXsSRV_USERNAME,	"hotModo Texture" },
         { LXsSRV_LOGSUBSYSTEM,	"val-texture"	},
@@ -244,7 +246,14 @@ LxResult hotModoTexture::vtx_ReadChannels(ILxUnknownID attr, void  **ppvData)
 		if(rd->m_outputType == 0)
 			m_context = m_ocean->new_context(true,true,false,false);
 		else if(rd->m_outputType == 1)
-			m_context = m_ocean->new_context(true,true,false,true);
+        {
+            if(rd->m_jacobianOutputMode == 1)
+            {
+                m_ocean->new_context(true,true,true,true);
+            } else {
+                m_ocean->new_context(true,true,false,true);
+            }
+        }
 	}
 
 	
@@ -257,7 +266,14 @@ LxResult hotModoTexture::vtx_ReadChannels(ILxUnknownID attr, void  **ppvData)
 		if(rd->m_outputType == 0)
 			m_ocean->update(rd->m_time, *m_context, true,true,false,false, m_ocean_scale*rd->m_waveHeight,rd->m_chop);
 		else if(rd->m_outputType == 1)
-			m_ocean->update(rd->m_time, *m_context, true,true,false,true, m_ocean_scale*rd->m_waveHeight,rd->m_chop);
+        {
+            if(rd->m_jacobianOutputMode == 1)
+            {
+                m_ocean->update(rd->m_time, *m_context, true,true,true,true, m_ocean_scale*rd->m_waveHeight,rd->m_chop);
+            } else {
+                m_ocean->update(rd->m_time, *m_context, true,true,false,true, m_ocean_scale*rd->m_waveHeight,rd->m_chop);
+            }
+        }
 	}
 
 	ppvData[0] = rd;
@@ -310,7 +326,7 @@ void hotModoTexture::vtx_Evaluate (ILxUnknownID etor, int *idx, ILxUnknownID vec
         tInpDsp->enable = true;
 
         mwnormalize(result);
-        tOut->value[0] = result[1]; //*rd->m_gain; // not sure it is a good idea to use gain here.
+        tOut->value[0] = result[1] * rd->m_waveHeight * rd->m_gain; //*rd->m_gain; // not sure it is a good idea to use gain here.
         tOut->alpha[0] = 1.0;
 
         if (LXi_TFX_COLOR == tInp->context)
@@ -421,19 +437,4 @@ void hotModoTexture::vtx_Cleanup (void	*data)
 	//if(rd->m_ocean != NULL) delete rd->m_ocean;
 	if(rd != NULL) delete rd;
 
-}
-
-void initialize ()
-{
-		hotModoDeformer	:: initialize ();
-		hotModoCommand :: initialize ();
-        hotModoChanModNameSpace:: initialize ();
-
-        CLxGenericPolymorph		*srv;
-
-        srv = new CLxPolymorph<hotModoTexture>;
-        srv->AddInterface (new CLxIfc_ValueTexture<hotModoTexture>);
-        //srv->AddInterface (new CLxIfc_ChannelUI   <hotModoTexture>);
-        srv->AddInterface (new CLxIfc_StaticDesc  <hotModoTexture>);
-        lx::AddServer ("hotModo.texture", srv);
 }

@@ -7,6 +7,9 @@
 
 using namespace hotModoChanModNameSpace;
 
+// OS X defines this. MSVC doesn't.
+#define M_PI        3.14159265358979323846264338327950288   /* pi             */
+
 // std::mutex myMutex; // global variable
 
 hotModoChanMod::hotModoChanMod ()
@@ -577,21 +580,27 @@ hotModoChanMod::cmod_Evaluate (
                              od->m_windSpeed,od->m_shortestWave,od->m_waveHeight,od->m_windDir/180.0f * M_PI,
                              od->m_damping,od->m_windAlign,od->m_oceanDepth,od->m_seed);
         if(od->m_outputType == 0)
+        {
             m_context = m_ocean->new_context(true,true,false,false);
-        else if(od->m_outputType == 1)
-            m_context = m_ocean->new_context(true,true,false,true);
+        } else if(od->m_outputType == 1)
+        {
+            m_context = m_ocean->new_context(true,true,true,true);
+        }
     }
 
     if( od->m_time != m_timeCache ||
-       od->m_chop != m_chopCache ||
-       od->m_waveHeight != m_waveHeightCache)
+        od->m_chop != m_chopCache ||
+        od->m_waveHeight != m_waveHeightCache)
 	{
 		float m_ocean_scale = 0.0f;
 		m_ocean_scale = m_ocean->get_height_normalize_factor();
 		if(od->m_outputType == 0)
+        {
 			m_ocean->update(od->m_time, *m_context, true,true,false,false, m_ocean_scale*od->m_waveHeight,od->m_chop);
-		else if(od->m_outputType == 1)
-			m_ocean->update(od->m_time, *m_context, true,true,false,true, m_ocean_scale*od->m_waveHeight,od->m_chop);
+        } else if(od->m_outputType == 1)
+        {
+			m_ocean->update(od->m_time, *m_context, true,true,true,true, m_ocean_scale*od->m_waveHeight,od->m_chop);
+        }
 	}
 
     float Jminus = 0.0;

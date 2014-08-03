@@ -13,7 +13,7 @@ LINK = g++-4.1
 CXXFLAGS = -g -c -I$(LXSDK_INC) -I$(HOT_INC) -I$(OPENEXR_INC) -fPIC -m64 -msse
 LDFLAGS = -L$(LXSDK_BUILD) -L/usr/lib -lcommon -lfftw3f -lfftw3f_threads -lImath -shared
 
-OBJS = $(OBJ_DIR)/hotModo_texture.o $(OBJ_DIR)/hotModo_chanmod.o $(OBJ_DIR)/hotModo_deformer.o $(OBJ_DIR)/hotModo_command.o
+OBJS = $(OBJ_DIR)/hotModo_init.o $(OBJ_DIR)/hotModo_texture.o $(OBJ_DIR)/hotModo_chanmod.o $(OBJ_DIR)/hotModo_deformer.o $(OBJ_DIR)/hotModo_command.o
 TARGET = $(TARGET_DIR)/hotmodo.lx
 
 all: $(TARGET)

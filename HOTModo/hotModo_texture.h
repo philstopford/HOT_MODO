@@ -16,6 +16,7 @@
 
 #include "Ocean.h"
 
+namespace hotModoTextureNameSpace {
 /*
  * ----------------------------------------------------------------
  * Value texture class
@@ -103,10 +104,17 @@ class hotModoTexture : public CLxImpl_ValueTexture
 				float m_time;
         };
 };
+    
+    void initialize ()
+    {        
+        CLxGenericPolymorph		*srv;
+        
+        srv = new CLxPolymorph<hotModoTexture>;
+        srv->AddInterface (new CLxIfc_ValueTexture<hotModoTexture>);
+        //srv->AddInterface (new CLxIfc_ChannelUI   <hotModoTexture>);
+        srv->AddInterface (new CLxIfc_StaticDesc  <hotModoTexture>);
+        lx::AddServer ("hotModo.texture", srv);
+    }
 
-
-namespace hotModoCommand		{	extern void	initialize ();	};
-namespace hotModoDeformer		{	extern void	initialize ();	};
-namespace hotModoChanModNameSpace		{	extern void	initialize ();	};
-
+}
 #endif //H_NOT_MODO_TEXTURE
