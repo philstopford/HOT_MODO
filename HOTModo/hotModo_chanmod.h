@@ -42,7 +42,6 @@ class hotModoChanMod
 
         drw::Ocean        *m_ocean;
         drw::OceanContext *m_context;
-
         LxResult		 pins_Initialize (ILxUnknownID item, ILxUnknownID super) LXx_OVERRIDE;
         void			 pins_Cleanup (void) LXx_OVERRIDE;
         LxResult		 pins_SynthName (char *buf, unsigned len) LXx_OVERRIDE;

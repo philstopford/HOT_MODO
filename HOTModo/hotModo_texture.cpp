@@ -17,7 +17,7 @@ LXtTagInfoDesc	 hotModoTexture::descInfo[] = {
 hotModoTexture::hotModoTexture ()
 {
     my_type = LXiTYPE_NONE;
-	m_ocean = NULL; 
+	m_ocean = NULL;
 	m_context = NULL;
 }
 
@@ -249,9 +249,9 @@ LxResult hotModoTexture::vtx_ReadChannels(ILxUnknownID attr, void  **ppvData)
         {
             if(rd->m_jacobianOutputMode == 1)
             {
-                m_ocean->new_context(true,true,true,true);
+                m_context = m_ocean->new_context(true,true,true,true);
             } else {
-                m_ocean->new_context(true,true,false,true);
+                m_context = m_ocean->new_context(true,true,false,true);
             }
         }
 	}

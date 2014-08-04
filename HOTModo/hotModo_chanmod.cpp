@@ -14,8 +14,8 @@ using namespace hotModoChanModNameSpace;
 
 hotModoChanMod::hotModoChanMod ()
 {
-        m_ocean = NULL; 
-        m_context = NULL;
+    m_ocean = NULL;
+    m_context = NULL;
 }
 
 hotModoChanMod::~hotModoChanMod ()
@@ -480,7 +480,7 @@ hotModoChanMod::cmod_Evaluate (
 
     CLxUser_Attributes	 at (attr);
 	OceanData		*od = new OceanData;
-
+    
     // Variables used to handle returned values from chanMod.ReadInput* methods.
     double dTemp; // used for 'ReadFloat' where modo's SDK returns a double.
     int iTemp;
@@ -545,7 +545,7 @@ hotModoChanMod::cmod_Evaluate (
     od->m_seed = (float) dTemp;
     chanMod.ReadInputFloat (attr, cm_idx_time, &dTemp);
     od->m_time = (float) dTemp;
-    
+
 	if( od->m_resolution != m_resolutionCache ||
        od->m_size != m_sizeCache ||
        od->m_windSpeed != m_windSpeedCache ||
